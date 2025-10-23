@@ -15,7 +15,7 @@ export default function NotFound() {
         router.replace('/admin/dashboard')
       } else if (user) {
         // If user is not admin, redirect to user dashboard
-        router.replace('/user/dashboard')
+        router.replace('/profile/dashboard')
       } else {
         // If not logged in, redirect to login
         router.replace('/')

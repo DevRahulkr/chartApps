@@ -61,11 +61,11 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
         setForm(data)
       } else {
         toast.error('Failed to fetch form')
-        router.push('/user/dashboard')
+        router.push('/profile/dashboard')
       }
     } catch (error) {
       toast.error('Error fetching form')
-      router.push('/user/dashboard')
+      router.push('/profile/dashboard')
     } finally {
       setIsLoading(false)
     }
@@ -144,7 +144,7 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
 
       if (response.ok) {
         toast.success('Form submitted successfully!')
-        router.push('/user/dashboard')
+        router.push('/profile/dashboard')
       } else {
         const error = await response.json()
         toast.error(error.detail || 'Failed to submit form')
@@ -310,7 +310,7 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
           {/* Submit Button */}
           <div className="flex justify-end space-x-4">
             <Link
-              href="/user/dashboard"
+              href="/profile/dashboard"
               className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-lg font-medium transition-colors"
             >
               Cancel

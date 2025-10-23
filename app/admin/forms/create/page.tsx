@@ -48,8 +48,8 @@ export default function CreateForm() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
           <p className="text-gray-600 mb-4">You need admin privileges to create forms.</p>
-          <Link href="/user/dashboard" className="text-blue-600 hover:text-blue-800">
-            Go to User Dashboard
+          <Link href="/profile/dashboard" className="text-blue-600 hover:text-blue-800">
+            Go to Dashboard
           </Link>
         </div>
       </div>

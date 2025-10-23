@@ -1,17 +1,11 @@
 'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
-import { useRouter,usePathname  } from 'next/navigation'
-import { useEffect,useState } from 'react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 
 export default function ProfilePage() {
   const { user, loading, logout } = useAuth()
-  const router = useRouter()
-  const pathname = usePathname()
-  const [initialRedirectDone, setInitialRedirectDone] = useState(false)
- console.log(user,router,pathname,initialRedirectDone,'userrrrrrrr')
 
 // useEffect(() => {
 //   if (!loading && !user) {
@@ -35,7 +29,7 @@ export default function ProfilePage() {
   if (!user) {
     return null
   }
-
+ console.log(user,'userrrrrrrr2222')
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -102,7 +96,7 @@ export default function ProfilePage() {
             </div>
           </div>
 
-            <div className="mt-8 bg-white shadow rounded-lg p-6">
+            {user.role === 'admin' && (<div className="mt-8 bg-white shadow rounded-lg p-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Welcome to Seva Forms!</h3>
               <p className="text-gray-600 mb-6">
                 You have successfully logged in to your account. This is a protected route that requires 
@@ -119,14 +113,14 @@ export default function ProfilePage() {
                   </Link>
                 ) : (
                   <Link
-                    href="/user/dashboard"
+                    href="/profile/dashboard"
                     className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors text-center"
                   >
                     📝 View Forms
                   </Link>
                 )}
               </div>
-            </div>
+            </div>)}
         </div>
       </div>
     </div>

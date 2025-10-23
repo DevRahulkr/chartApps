@@ -68,7 +68,7 @@ export default function ViewResponse({ params }: { params: { formId: string } })
         setForm(formData)
       } else {
         toast.error('Failed to fetch form')
-        router.push('/user/dashboard')
+        router.push('/profile/dashboard')
         return
       }
 
@@ -82,12 +82,12 @@ export default function ViewResponse({ params }: { params: { formId: string } })
         setResponse(responseData)
       } else {
         toast.error('No response found for this form')
-        router.push('/user/dashboard')
+        router.push('/profile/dashboard')
         return
       }
     } catch (error) {
       toast.error('Error fetching data')
-      router.push('/user/dashboard')
+      router.push('/profile/dashboard')
     } finally {
       setIsLoading(false)
     }

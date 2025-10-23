@@ -27,7 +27,6 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false)
   const { user, loading, register: registerUser } = useAuth()
   const router = useRouter()
-  console.log("page:",router, user) 
   // Redirect if already authenticated
   // useEffect(() => {
   //   if (!loading && user) {
