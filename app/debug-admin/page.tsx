@@ -21,7 +21,7 @@ export default function DebugAdmin() {
     clearResults()
     
     addResult('🔍 DEBUGGING ADMIN ACCESS')
-    addResult('=' * 50)
+    addResult('='.repeat(50))
     
     // Step 1: Check user authentication
     addResult('\n1. Checking user authentication...')
@@ -116,7 +116,8 @@ export default function DebugAdmin() {
       addResult('💡 This might be the issue!')
     }
     
-    addResult('\n' + '=' * 50)
+    addResult('\n' + '='.repeat(50))
+
     addResult('🎯 DEBUGGING COMPLETE')
     
     setIsLoading(false)

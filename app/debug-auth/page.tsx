@@ -21,7 +21,7 @@ export default function DebugAuth() {
     clearResults()
     
     addResult('🔍 DEBUGGING AUTHENTICATION ISSUES')
-    addResult('=' * 50)
+    addResult('='.repeat(50))
     
     // Step 1: Check user authentication
     addResult('\n1. Checking user authentication...')
@@ -148,7 +148,8 @@ export default function DebugAuth() {
       addResult(`❌ Frontend API route error: ${error.message}`)
     }
     
-    addResult('\n' + '=' * 50)
+    addResult('\n' + '='.repeat(50))
+
     addResult('🎯 SUMMARY:')
     
     if (storedToken) {
