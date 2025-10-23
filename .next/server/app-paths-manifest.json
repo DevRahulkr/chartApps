@@ -1,0 +1,9 @@
+{
+  "/profile/dashboard/page": "app/profile/dashboard/page.js",
+  "/user/available/page": "app/user/available/page.js",
+  "/user/forms/[formId]/response/page": "app/user/forms/[formId]/response/page.js",
+  "/user/dashboard/page": "app/user/dashboard/page.js",
+  "/api/forms/month/[month]/route": "app/api/forms/month/[month]/route.js",
+  "/api/forms/[formId]/route": "app/api/forms/[formId]/route.js",
+  "/user/forms/[formId]/submit/page": "app/user/forms/[formId]/submit/page.js"
+}

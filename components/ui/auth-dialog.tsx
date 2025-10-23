@@ -1,0 +1,171 @@
+"use client";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useId } from "react";
+import toast from "react-hot-toast";
+import Image from "next/image"
+
+interface LoginForm {
+  emailOrUsername: string;
+  password: string;
+  rememberMe: boolean;
+}
+
+interface AuthDialogProps {
+  children?: React.ReactNode;
+  onSuccess?: () => void;
+  triggerText?: string;
+  title?: string;
+  description?: string;
+}
+
+export function AuthDialog({ 
+  children, 
+  onSuccess, 
+  triggerText = "Sign in",
+  title = "Self Progress Chart",
+  description = "Enter your credentials to login to your account."
+}: AuthDialogProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { login,user } = useAuth();
+  const router = useRouter();
+  const id = useId();
+ console.log(router,'router')
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<LoginForm>();
+
+  const onSubmit = async (data: LoginForm) => {
+    setIsLoading(true);
+    try {
+      await login(data.emailOrUsername, data.password);
+      toast.success("Login successful!");
+    if (user?.is_active) {
+      router.push("/profile/dashboard");
+    } else {
+      router.push("/profile"); // fallback for inactive users
+    }
+      setIsOpen(false);
+      reset();
+      onSuccess?.();
+    } catch (error: any) {
+      toast.error(error.message || "Login failed - please check your credentials");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) {
+      reset();
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild>
+        {children || <Button variant="outline">{triggerText}</Button>}
+      </DialogTrigger>
+      <DialogContent
+        onPointerDownOutside={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
+      >
+        <div className="flex flex-col items-center gap-2">
+          <div
+            className="flex shrink-0 items-center justify-center rounded-full border border-border"
+            aria-hidden="true"
+          >
+            <Image
+              src="/return%20to%20the%20source.svg"  
+              alt="Return to the Source"
+              width={600}  
+              height={600} 
+            />
+          </div>
+          <DialogHeader>
+            <DialogTitle className="sm:text-center">Self Progress Chart</DialogTitle>
+            <DialogDescription className="sm:text-center">
+              Enter your credentials to login to your account.
+            </DialogDescription>
+          </DialogHeader>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor={`${id}-email`}>Email or Username</Label>
+              <Input
+                id={`${id}-email`}
+                placeholder="hi@yourcompany.com or username"
+                type="text"
+                {...register("emailOrUsername", {
+                  required: "Email or username is required",
+                })}
+                className={errors.emailOrUsername ? "border-destructive" : ""}
+              />
+              {errors.emailOrUsername && (
+                <p className="text-sm text-destructive">{errors.emailOrUsername.message}</p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor={`${id}-password`}>Password</Label>
+              <Input
+                id={`${id}-password`}
+                placeholder="Enter your password"
+                type="password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                })}
+                className={errors.password ? "border-destructive" : ""}
+              />
+              {errors.password && (
+                <p className="text-sm text-destructive">{errors.password.message}</p>
+              )}
+            </div>
+          </div>
+          <div className="flex justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id={`${id}-remember`}
+                {...register("rememberMe")}
+              />
+              <Label htmlFor={`${id}-remember`} className="font-normal text-muted-foreground">
+                Remember me
+              </Label>
+            </div>
+            <a className="text-sm underline hover:no-underline" href="#">
+              Forgot password?
+            </a>
+          </div>
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Signing in..." : "Sign in"}
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
