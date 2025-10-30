@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { getAuthHeaders } from '@/lib/auth'
+import { api } from '@/lib/api'
 
 interface Form {
   id: string
@@ -52,61 +53,41 @@ export default function AdminDashboard() {
     }
   }, [user, loading, router])
 
-  const fetchForms = async () => {
-    try {
-      const response = await fetch('/api/admin/forms', {
-        headers: getAuthHeaders()
+const fetchForms = async () => {
+  try {
+    const res = await api.get('/admin/forms')
+
+    const formsWithCounts = await Promise.all(
+      res.data.map(async (form: Form) => {
+        try {
+          const countRes = await api.get(`/admin/forms/${form.id}/response-count`)
+          return { ...form, response_count: countRes.data.response_count }
+        } catch {
+          return { ...form, response_count: 0 }
+        }
       })
-      
-      if (response.ok) {
-        const data = await response.json()
-        // Fetch response counts for each form
-        const formsWithCounts = await Promise.all(
-          data.map(async (form: Form) => {
-            try {
-              const countResponse = await fetch(`/api/admin/forms/${form.id}/response-count`, {
-                headers: getAuthHeaders()
-              })
-              if (countResponse.ok) {
-                const countData = await countResponse.json()
-                return { ...form, response_count: countData.response_count }
-              }
-            } catch (error) {
-              console.error(`Error fetching count for form ${form.id}:`, error)
-            }
-            return { ...form, response_count: 0 }
-          })
-        )
-        setForms(formsWithCounts)
-      } else {
-        toast.error('Failed to fetch forms')
-      }
-    } catch (error) {
-      toast.error('Error fetching forms')
-    } finally {
-      setIsLoading(false)
-    }
+    )
+
+    setForms(formsWithCounts)
+  } catch (error) {
+    toast.error('Failed to fetch forms')
+  } finally {
+    setIsLoading(false)
   }
+}
 
-  const deleteForm = async (formId: string) => {
-    if (!confirm('Are you sure you want to delete this form?')) return
+const deleteForm = async (formId: string) => {
+  if (!confirm('Are you sure you want to delete this form?')) return
 
-    try {
-      const response = await fetch(`/api/admin/forms/${formId}`, {
-        method: 'DELETE',
-        headers: getAuthHeaders()
-      })
-
-      if (response.ok) {
-        toast.success('Form deleted successfully')
-        fetchForms()
-      } else {
-        toast.error('Failed to delete form')
-      }
-    } catch (error) {
-      toast.error('Error deleting form')
-    }
+  try {
+    await api.delete(`/admin/forms/${formId}`)
+    toast.success('Form deleted successfully')
+    fetchForms()
+  } catch {
+    toast.error('Error deleting form')
   }
+}
+
 
   if (loading || isLoading) {
     return (

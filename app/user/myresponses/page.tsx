@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import Cookies from "js-cookie"
+import { api } from '@/lib/api'
 
 interface UserResponse {
   id: string
@@ -36,21 +37,21 @@ export default function MyResponsesPage() {
 
     const token = Cookies.get("access_token")
 
-    const fetchResponses = async () => {
-        try {
-            const res = await fetch('/api/my-responses/', {
-                headers: { Authorization: `Bearer ${token}` },
-            })
-            if (res.ok) {
-                const data = await res.json()
-                setResponses(data)
-            } else toast.error('Failed to fetch responses')
-        } catch (err) {
-            toast.error('Error fetching responses')
-        } finally {
-            setIsLoading(false)
-        }
-    }
+const fetchResponses = async () => {
+  try {
+    const res = await api.get(`/my-responses?${selectedMonth}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+
+    const data = res.data
+    setResponses(data)
+  } catch (err) {
+    toast.error('Error fetching responses')
+  } finally {
+    setIsLoading(false)
+  }
+}
+
 
   if (loading || isLoading) {
     return (
@@ -117,17 +118,11 @@ export default function MyResponsesPage() {
 function ResponseCard({ response }: { response: UserResponse }) {
   const formatAnswer = (answer: string | string[]) => (Array.isArray(answer) ? answer.join(', ') : answer)
 
-    const firstAnswerDate =
-    response.answers.length > 0
-      ? new Date(response.answers[0].answer as string)
-      : null
-
-  const selectedMonth = new Date().toISOString().slice(0, 7) // or pass it as prop
-
-  const matchesMonth =
-    firstAnswerDate &&
-    !isNaN(firstAnswerDate.getTime()) &&
-    firstAnswerDate.toISOString().slice(0, 7) === selectedMonth
+    const dateAnswer = response.answers.find(
+    (ans) =>
+      ans.question_text.toLowerCase() === "date" ||
+      ans.question_id.toLowerCase().includes("date")
+  );
 
   return (
     <div className="px-6 py-4 hover:bg-gray-50 flex justify-between items-center">
@@ -136,7 +131,7 @@ function ResponseCard({ response }: { response: UserResponse }) {
           Response #{response.id.slice(-6)}
         </h3> */}
         <p className="text-sm text-gray-600">
-          Submitted on {new Date(response.submitted_at).toLocaleString()}
+          Submitted on {dateAnswer ? formatAnswer(dateAnswer.answer) : "N/A"}
         </p>
         {/* <div className="mt-2 space-y-1">
           {response.answers.slice(0, 2).map((ans, i) => (
@@ -150,14 +145,23 @@ function ResponseCard({ response }: { response: UserResponse }) {
         </div> */}
       </div>
         {/* ✅ Show only if month matches */}
-      {matchesMonth && (
+      {/* {matchesMonth && ( */}
+      
+      <div className="flex items-center space-x-2">
         <Link
           href={`/user/forms/${response.form_id}/response`}
           className="text-blue-600 hover:text-blue-900 text-sm font-medium"
         >
           View Full Response
         </Link>
-      )}
+        <Link
+          href={`/user/forms/${response.form_id}/edit`}
+          className="text-indigo-600 hover:text-indigo-900 text-sm font-medium"
+        >
+          Edit
+        </Link>
+      </div>
+      {/* )} */}
     </div>
   )
 }

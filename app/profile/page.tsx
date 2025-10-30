@@ -41,12 +41,23 @@ export default function ProfilePage() {
                   <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
                   <p className="mt-2 text-gray-600">Manage your account information</p>
                 </div>
-                <button
-                  onClick={handleLogout}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out"
-                >
-                  Logout
-                </button>
+                    <div className="flex gap-3">
+                  {/* ✅ Back to Dashboard Button */}
+                  <Link
+                    href="/profile/dashboard"
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+                  >
+                    Back to Dashboard
+                  </Link>
+
+                  {/* ✅ Logout Button */}
+                  <button
+                    onClick={handleLogout}
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out"
+                  >
+                    Logout
+                  </button>
+                </div>
               </div>
             </div>
 

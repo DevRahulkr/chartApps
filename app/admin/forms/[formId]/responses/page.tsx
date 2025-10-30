@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
 import { getAuthHeaders } from '@/lib/auth'
 import { toast } from 'react-hot-toast'
+import { api } from '@/lib/api'
 
 interface Answer {
   question_id: string
@@ -74,106 +75,84 @@ export default function FormResponsesPage() {
     }
   }, [user, loading, router, formId])
 
-  const fetchFormAndResponses = async () => {
-    try {
-      // Fetch form details
-      const formResponse = await fetch(`/api/admin/forms/${formId}`, {
-        headers: getAuthHeaders()
-      })
-      
-      if (formResponse.ok) {
-        const formData = await formResponse.json()
-        setForm(formData)
-      }
+const fetchFormAndResponses = async () => {
+  try {
+    // ✅ Fetch form details
+    const formRes = await api.get(`/admin/forms/${formId}`)
+    if (formRes.status === 200) {
+      setForm(formRes.data)
+    }
 
-      // Fetch responses
-      const responsesResponse = await fetch(`/api/admin/forms/${formId}/responses`, {
-        headers: getAuthHeaders()
-      })
-      
-      if (responsesResponse.ok) {
-        const responsesData = await responsesResponse.json()
-        console.log('Backend response data:', responsesData)
-        
-        // If backend returns old format, enhance it on frontend
-        let allUsers: any = {}
-        let formData: any = {}
-        
-        // Check if we need to fetch additional data
-        const needsEnhancement = responsesData.some((response: any) => !response.user_name || !response.question_answers)
-        
-        if (needsEnhancement) {
-          try {
-            // Fetch all users
-            const usersResponse = await fetch('/api/admin/users', {
-              headers: getAuthHeaders()
-            })
-            if (usersResponse.ok) {
-              const users = await usersResponse.json()
-              allUsers = users.reduce((acc: any, user: any) => {
-                acc[user.id] = user
-                return acc
-              }, {})
-            }
-            
-            // Fetch form data
-            const formResponse = await fetch(`/api/admin/forms/${formId}`, {
-              headers: getAuthHeaders()
-            })
-            if (formResponse.ok) {
-              formData = await formResponse.json()
-            }
-          } catch (error) {
-            console.error('Error fetching additional data:', error)
-          }
-        }
-        
-        const enhancedResponses = responsesData.map((response: any) => {
-          // If response already has user details, use it
-          if (response.user_name && response.question_answers) {
-            return response
-          }
-          
-          // Enhance with user details
-          const userData = allUsers[response.user_id] || {}
-          
-          // Create question-answer pairs with question text
-          const questionAnswers = response.answers?.map((answer: any) => {
-            const question = formData.questions?.find((q: any) => q.id === answer.question_id)
+    // ✅ Fetch responses
+    const responsesRes = await api.get(`/admin/forms/${formId}/responses`)
+    if (!responsesRes.data) {
+      toast.error('No responses found')
+      return
+    }
+
+    const responsesData = responsesRes.data
+    console.log('Backend response data:', responsesData)
+
+    let enhancedResponses = responsesData
+
+    // ✅ Check if enhancement is needed
+    const needsEnhancement = responsesData.some(
+      (response: any) => !response.user_name || !response.question_answers
+    )
+
+    if (needsEnhancement) {
+      console.warn('Enhancing old response format...')
+
+      // ✅ Fetch users & add lookup
+      const usersRes = await api.get('/admin/users')
+      const usersLookup: any = usersRes.data.reduce((acc: any, user: any) => {
+        acc[user.id] = user
+        return acc
+      }, {})
+
+      // ✅ We already fetched form above → reuse
+      const formQuestions = formRes.data?.questions || []
+
+      enhancedResponses = responsesData.map((response: any) => {
+        const user = usersLookup[response.user_id] || {}
+
+        const questionAnswers =
+          response.answers?.map((answer: any) => {
+            const question = formQuestions.find((q: any) => q.id === answer.question_id)
             return {
               question_id: answer.question_id,
-              question_text: question?.text || `Question ID: ${answer.question_id}`,
+              question_text: question?.text || `Question #${answer.question_id}`,
               question_type: question?.type || 'text',
               answer: answer.answer
             }
           }) || []
-          
-          return {
-            response_id: response.id || response.response_id,
-            form_id: response.form_id,
-            user_id: response.user_id,
-            user_name: userData.full_name || userData.name || 'Unknown User',
-            user_email: userData.email || 'Unknown Email',
-            user_username: userData.username || 'Unknown Username',
-            submitted_at: response.submitted_at,
-            question_answers: questionAnswers
-          }
-        })
-        
-        // Sort responses by user name alphabetically
-        const sortedResponses = enhancedResponses.sort((a: ResponseView, b: ResponseView) => 
-          (a.user_name || '').localeCompare(b.user_name || '')
-        )
-        setResponses(sortedResponses)
-      } else {
-        toast.error('Failed to fetch responses')
-      }
-    } catch (error) {
-      toast.error('Error fetching data')
-    } finally {
-      setIsLoading(false)
+
+        return {
+          response_id: response.id,
+          form_id: response.form_id,
+          user_id: response.user_id,
+          user_name: user.full_name || user.name || 'Unknown User',
+          user_email: user.email || 'Unknown Email',
+          user_username: user.username || 'Unknown Username',
+          submitted_at: response.submitted_at,
+          question_answers: questionAnswers
+        }
+      })
     }
+
+    // ✅ Sort alphabetically by user
+    const sortedResponses = enhancedResponses.sort((a: any, b: any) =>
+      (a.user_name || '').localeCompare(b.user_name || '')
+    )
+    setResponses(sortedResponses)
+  } catch (error) {
+    console.error(error)
+    toast.error('Error fetching data')
+  } finally {
+    setIsLoading(false)
   }
+}
+
 
   const formatAnswer = (answer: string | string[]) => {
     if (Array.isArray(answer)) {

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import Cookies from "js-cookie"
+import { api } from '@/lib/api'
 
 interface Form {
   id: string
@@ -47,22 +48,21 @@ export default function AvailableFormsPage() {
 
 const token = Cookies.get("access_token")
 
-  const fetchForms = async () => {
-    try {
-      console.log(selectedMonth,token,'selectedMonth')
-      const res = await fetch(`/api/forms/month/${selectedMonth}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      if (res.ok) {
-        const data = await res.json()
-        setForms(data)
-      } else toast.error('Failed to fetch forms')
-    } catch (err) {
-      toast.error('Error fetching forms')
-    } finally {
-      setIsLoading(false)
-    }
+const fetchForms = async () => {
+  try {
+    const res = await api.get(`/forms/month/${selectedMonth}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+
+    setForms(res.data)
+    
+  } catch (err) {
+    toast.error('Error fetching forms')
+  } finally {
+    setIsLoading(false)
   }
+}
+
 
   if (loading || isLoading) {
     return (

@@ -8,6 +8,7 @@ import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { AuthDialog } from '@/components/ui/auth-dialog'
 import Image from "next/image"
+import { api } from '@/lib/api'
 
 interface RegisterForm {
   fullName: string
@@ -26,7 +27,25 @@ interface RegisterForm {
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false)
   const { user, loading, register: registerUser } = useAuth()
+  const [countries, setCountries] = useState<{ name: string; code: string; dial_code: string }[]>([]);
   const router = useRouter()
+  const [selectedDialCode, setSelectedDialCode] = useState('');
+
+  console.log(countries,'countries')
+
+  useEffect(() => {
+    async function fetchCountries() {
+      try {
+        const res = await api.get('/countries');
+        setCountries(res.data.countries);
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+      }
+    }
+
+    fetchCountries();
+  }, []);
+
   // Redirect if already authenticated
   // useEffect(() => {
   //   if (!loading && user) {
@@ -37,6 +56,9 @@ export default function RegisterPage() {
   //     }
   //   }
   // }, [user, loading, router])
+  useEffect(() => {
+  console.log("API Base URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
+}, []);
   
   const {
     register,
@@ -213,28 +235,26 @@ export default function RegisterPage() {
               )}
             </div>
 
-            
+
             <div>
               <label htmlFor="Country" className="block text-sm font-medium text-gray-700">
                 Country
               </label>
-              <input
-                {...register('Country', {
-                  required: 'Country is required',
-                  minLength: {
-                    value: 3,
-                    message: 'Country must be at least 3 characters',
-                  },
-                  pattern: {
-                    value: /^[a-zA-Z0-9_]+$/,
-                    message: 'Country can only contain letters, numbers, and underscores',
-                  },
-                })}
-                type="text"
-                autoComplete="Country"
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Enter your Country"
-              />
+              <select
+                {...register('Country', { required: 'Country is required' })}
+                onChange={(e) => {
+                  const country = countries.find((c) => c.code === e.target.value);
+                  if (country) setSelectedDialCode(country.dial_code);
+                }}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+                <option value="">Select your country</option>
+                {countries.map((country) => (
+                  <option key={country.code} value={country.code}>
+                    {country.name}
+                  </option>
+                ))}
+              </select>
               {errors.Country && (
                 <p className="mt-1 text-sm text-red-600">{errors.Country.message}</p>
               )}
@@ -272,23 +292,23 @@ export default function RegisterPage() {
               <label htmlFor="PhoneNumber" className="block text-sm font-medium text-gray-700">
                 Phone Number
               </label>
-              <input
-                {...register('PhoneNumber', {
-                  required: 'PhoneNumber is required',
-                  minLength: {
-                    value: 3,
-                    message: 'PhoneNumber must be at least 3 characters',
-                  },
-                  pattern: {
-                    value: /^[a-zA-Z0-9_]+$/,
-                    message: 'PhoneNumber can only contain letters, numbers, and underscores',
-                  },
-                })}
-                type="text"
-                autoComplete="PhoneNumber"
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Enter your Phone Number"
-              />
+              <div className="flex">
+                <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                  {selectedDialCode || '+--'}
+                </span>
+                <input
+                  {...register('PhoneNumber', {
+                    required: 'Phone number is required',
+                    pattern: {
+                      value: /^\+?[0-9\s\-()]{7,15}$/,
+                      message: 'Enter a valid phone number',
+                    },
+                  })}
+                  type="tel"
+                  className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  placeholder="Enter your phone number"
+                />
+              </div>
               {errors.PhoneNumber && (
                 <p className="mt-1 text-sm text-red-600">{errors.PhoneNumber.message}</p>
               )}
@@ -302,8 +322,8 @@ export default function RegisterPage() {
                 {...register('email', {
                   required: 'Email is required',
                   pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: 'Invalid email address',
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i,
+                    message: "Enter a valid email address",
                   },
                 })}
                 type="email"

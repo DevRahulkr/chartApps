@@ -23,7 +23,9 @@ export default function CreateForm() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    month: new Date().toISOString().slice(0, 7) // Current month in YYYY-MM format
+    month: new Date().toISOString().slice(0, 7), // Current month in YYYY-MM format
+    chart_start_date: '',
+    chart_end_date: ''
   })
   const [questions, setQuestions] = useState<Question[]>([
     {
@@ -199,6 +201,36 @@ export default function CreateForm() {
                   required
                   value={formData.month}
                   onChange={(e) => setFormData({ ...formData, month: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Chart Start Date *
+                </label>
+                <input
+                  type="date"
+                  required
+                  value={formData.chart_start_date}
+                  onChange={(e) =>
+                    setFormData({ ...formData, chart_start_date: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Chart End Date *
+                </label>
+                <input
+                  type="date"
+                  required
+                  value={formData.chart_end_date}
+                  onChange={(e) =>
+                    setFormData({ ...formData, chart_end_date: e.target.value })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                 />
               </div>

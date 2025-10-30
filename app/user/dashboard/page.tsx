@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { getAuthHeaders } from '@/lib/auth'
+import { api } from '@/lib/api'
 
 interface Form {
   id: string
@@ -71,49 +72,26 @@ export default function UserDashboard() {
     }
   }, [selectedMonth, user])
 
-  const fetchForms = async () => {
-    try {
-      const token = localStorage.getItem('access_token') || document.cookie.split('; ').find(row => row.startsWith('access_token='))?.split('=')[1]
-      const response = await fetch(`/api/forms/month/${selectedMonth}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      
-      if (response.ok) {
-        const data = await response.json()
-        setForms(data)
-      } else {
-        toast.error('Failed to fetch forms')
-      }
-    } catch (error) {
-      toast.error('Error fetching forms')
-    } finally {
-      setIsLoading(false)
-    }
+const fetchForms = async () => {
+  try {
+    const res = await api.get(`/api/forms/month/${selectedMonth}`)
+    setForms(res.data)
+  } catch (err) {
+    toast.error('Failed to fetch forms')
+  } finally {
+    setIsLoading(false)
   }
+}
 
-  const fetchUserResponses = async () => {
-    try {
-      const token = localStorage.getItem('access_token') || document.cookie.split('; ').find(row => row.startsWith('access_token='))?.split('=')[1]
-      const response = await fetch('/api/my-responses', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      
-      if (response.ok) {
-        const data = await response.json()
-        setUserResponses(data)
-      } else {
-        toast.error('Failed to fetch responses')
-      }
-    } catch (error) {
-      toast.error('Error fetching responses')
-    }
+const fetchUserResponses = async () => {
+  try {
+    const res = await api.get(`/api/my-responses`)
+    setUserResponses(res.data)
+  } catch (err) {
+    toast.error('Failed to fetch responses')
   }
+}
+
 
 
   if (loading || isLoading) {

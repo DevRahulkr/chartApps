@@ -6,6 +6,7 @@ import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { getAuthHeaders } from '@/lib/auth'
 import toast from 'react-hot-toast'
+import { api } from '@/lib/api'
 
 interface Question {
   id: string
@@ -61,32 +62,29 @@ export default function EditForm() {
     }
   }, [user, loading, router, formId])
 
-  const fetchForm = async () => {
-    try {
-      const response = await fetch(`/api/admin/forms/${formId}`, {
-        headers: getAuthHeaders()
-      })
-      
-      if (response.ok) {
-        const form = await response.json()
-        setOriginalForm(form)
-        setFormData({
-          title: form.title,
-          description: form.description,
-          month: form.month
-        })
-        setQuestions(form.questions || [])
-      } else {
-        toast.error('Failed to fetch form')
-        router.push('/admin/dashboard')
-      }
-    } catch (error) {
-      toast.error('Error fetching form')
-      router.push('/admin/dashboard')
-    } finally {
-      setIsLoading(false)
-    }
+const fetchForm = async () => {
+  try {
+    const res = await api.get(`/admin/forms/${formId}`)
+
+    const form = res.data
+    setOriginalForm(form)
+
+    setFormData({
+      title: form.title,
+      description: form.description,
+      month: form.month
+    })
+
+    setQuestions(form.questions || [])
+    
+  } catch (error) {
+    toast.error('Failed to load form')
+    router.push('/admin/dashboard')
+  } finally {
+    setIsLoading(false)
   }
+}
+
 
   const addQuestion = () => {
     const newQuestion: Question = {
