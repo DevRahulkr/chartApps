@@ -155,24 +155,17 @@ const fetchForm = async () => {
     setIsSubmitting(true)
 
     try {
-      const response = await fetch(`/api/admin/forms/${formId}`, {
-        method: 'PUT',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({
-          ...formData,
-          questions: questions.filter(q => q.text.trim() !== '')
-        })
-      })
-
-      if (response.ok) {
-        toast.success('Form updated successfully!')
-        router.push('/admin/dashboard')
-      } else {
-        const error = await response.json()
-        toast.error(error.detail || 'Failed to update form')
+      const payload = {
+        ...formData,
+        questions: questions.filter(q => q.text.trim() !== '')
       }
-    } catch (error) {
-      toast.error('Error updating form')
+
+      const response = await api.put(`/admin/forms/${formId}`, payload)
+
+      toast.success('Form updated successfully!')
+      router.push('/admin/dashboard')
+    } catch (err: any) {
+      toast.error(err?.response?.data?.detail || 'Failed to update form')
     } finally {
       setIsSubmitting(false)
     }
@@ -184,20 +177,11 @@ const fetchForm = async () => {
     }
 
     try {
-      const response = await fetch(`/api/admin/forms/${formId}`, {
-        method: 'DELETE',
-        headers: getAuthHeaders()
-      })
-
-      if (response.ok) {
-        toast.success('Form deleted successfully!')
-        router.push('/admin/dashboard')
-      } else {
-        const error = await response.json()
-        toast.error(error.detail || 'Failed to delete form')
-      }
-    } catch (error) {
-      toast.error('Error deleting form')
+      await api.delete(`/admin/forms/${formId}`)
+      toast.success('Form deleted successfully!')
+      router.push('/admin/dashboard')
+    } catch (err: any) {
+      toast.error(err?.response?.data?.detail || 'Failed to delete form')
     }
   }
 

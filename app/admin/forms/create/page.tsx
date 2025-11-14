@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getAuthHeaders } from '@/lib/auth'
 import toast from 'react-hot-toast'
+import { api } from '@/lib/api'
 
 interface Question {
   id: string
@@ -122,33 +123,28 @@ export default function CreateForm() {
     }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
+  setIsSubmitting(true)
 
-    try {
-      const response = await fetch('/api/admin/forms', {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({
-          ...formData,
-          questions: questions.filter(q => q.text.trim() !== '')
-        })
-      })
-
-      if (response.ok) {
-        toast.success('Form created successfully!')
-        router.push('/admin/dashboard')
-      } else {
-        const error = await response.json()
-        toast.error(error.detail || 'Failed to create form')
-      }
-    } catch (error) {
-      toast.error('Error creating form')
-    } finally {
-      setIsSubmitting(false)
+  try {
+    const payload = {
+      ...formData,
+      questions: questions.filter(q => q.text.trim() !== '')
     }
+
+    const response = await api.post('/admin/forms', payload) 
+
+    toast.success('Form created successfully!')
+    router.push('/admin/dashboard')
+  } catch (err: any) {
+    const detail = err?.response?.data?.detail || err?.message || 'Failed to create form'
+    toast.error(detail)
+  } finally {
+    setIsSubmitting(false)
   }
+}
+
 
   return (
     <div className="min-h-screen bg-gray-50">
