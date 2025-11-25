@@ -167,7 +167,7 @@ export default function AdminUsersPage() {
                   {users.length === 0 ? (
                     <tr>
                       <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
-                        No users found. Click "Refresh Users" to load users.
+                        No users found. Click Refresh Users to load users.
                       </td>
                     </tr>
                   ) : (

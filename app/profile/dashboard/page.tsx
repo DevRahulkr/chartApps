@@ -7,10 +7,9 @@ import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import Image from "next/image"
 
-export default function profileDashboard() {
+export default function ProfileDashboard() {
   const { user, loading, logout } = useAuth()
   const router = useRouter()
-  console.log(user,router,'user')
   useEffect(() => {
     if (!loading && !user) {
       router.push('/')

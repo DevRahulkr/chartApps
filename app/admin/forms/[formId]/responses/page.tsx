@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
-import { getAuthHeaders } from '@/lib/auth'
 import { toast } from 'react-hot-toast'
 import { api } from '@/lib/api'
 
@@ -91,7 +90,6 @@ const fetchFormAndResponses = async () => {
     }
 
     const responsesData = responsesRes.data
-    console.log('Backend response data:', responsesData)
 
     let enhancedResponses = responsesData
 
@@ -212,7 +210,7 @@ const fetchFormAndResponses = async () => {
                 </svg>
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">No responses yet</h3>
-              <p className="text-gray-500">This form hasn't received any responses yet.</p>
+              <p className="text-gray-500">This form has not received any responses yet.</p>
             </div>
           ) : (
             <div className="divide-y divide-gray-200">

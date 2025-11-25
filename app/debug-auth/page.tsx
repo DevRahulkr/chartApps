@@ -243,7 +243,7 @@ export default function DebugAuth() {
           <div className="mt-6 text-sm text-gray-600">
             <h3 className="font-medium mb-2">What this debug does:</h3>
             <ul className="list-disc list-inside space-y-1">
-              <li>Checks if you're logged in and have admin role</li>
+              <li>Checks if you are logged in and have admin role</li>
               <li>Checks localStorage for authentication token</li>
               <li>Tests backend connection and authentication</li>
               <li>Tests admin forms endpoint with your token</li>
