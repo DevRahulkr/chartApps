@@ -117,13 +117,12 @@ const fetchResponses = async () => {
 
 function ResponseCard({ response }: { response: UserResponse }) {
   const formatAnswer = (answer: string | string[]) => (Array.isArray(answer) ? answer.join(', ') : answer)
-
-    const dateAnswer = response.answers.find(
-    (ans) =>
-      ans.question_text.toLowerCase() === "date" ||
-      ans.question_id.toLowerCase().includes("date")
-  );
-
+  const dateAnswer = response.answers.find((ans) => {
+    const text = (ans.question_text ?? "").toLowerCase()
+    const id = (ans.question_id ?? "").toLowerCase()
+    return text === "date" || text.includes("date") || id.includes("date")
+  })
+  const adminBase = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.NEXT_PUBLIC_API_URL || 'https://bk-seva.onrender.com'
   return (
     <div className="px-6 py-4 hover:bg-gray-50 flex justify-between items-center">
       <div>
@@ -161,7 +160,6 @@ function ResponseCard({ response }: { response: UserResponse }) {
           Edit
         </Link>
       </div>
-      {/* )} */}
     </div>
   )
 }

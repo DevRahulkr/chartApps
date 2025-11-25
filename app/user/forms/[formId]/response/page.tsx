@@ -45,6 +45,12 @@ export default function ViewResponse({ params }: { params: { formId: string } })
   const [response, setResponse] = useState<UserResponse | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
+  const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  'https://bk-seva.onrender.com'
+
+
   useEffect(() => {
     if (!loading && !user) {
       router.push('/')
@@ -59,7 +65,7 @@ export default function ViewResponse({ params }: { params: { formId: string } })
   const fetchFormAndResponse = async () => {
     try {
       // Fetch form details
-      const formResponse = await fetch(`/api/forms/${params.formId}`, {
+      const formResponse = await fetch(`${API_BASE}/forms/${params.formId}`, {
         headers: getAuthHeaders()
       })
       
@@ -73,7 +79,7 @@ export default function ViewResponse({ params }: { params: { formId: string } })
       }
 
       // Fetch user's response
-      const responseResponse = await fetch(`/api/forms/${params.formId}/my-response`, {
+      const responseResponse = await fetch(`${API_BASE}/forms/${params.formId}/my-response`, {
         headers: getAuthHeaders()
       })
       
