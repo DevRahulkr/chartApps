@@ -38,7 +38,11 @@ export default function EditForm() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    month: ''
+    month: '',
+    chart_start_date: '',
+    chart_end_date: '',
+    validity_start_date: '',
+    validity_end_date: '',
   })
   const [questions, setQuestions] = useState<Question[]>([])
   const [originalForm, setOriginalForm] = useState<Form | null>(null)
@@ -72,7 +76,11 @@ const fetchForm = async () => {
     setFormData({
       title: form.title,
       description: form.description,
-      month: form.month
+      month: form.month,
+      chart_start_date: form.chart_start_date || '',
+      chart_end_date: form.chart_end_date || '',
+      validity_start_date: form.validity_start_date || '',
+      validity_end_date: form.validity_end_date || ''
     })
 
     setQuestions(form.questions || [])
@@ -272,6 +280,59 @@ const fetchForm = async () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                 />
               </div>
+              <div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Chart Start Date
+  </label>
+  <input
+    type="date"
+    value={formData.chart_start_date}
+    onChange={(e) =>
+      setFormData({ ...formData, chart_start_date: e.target.value })
+    }
+    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+  />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Chart End Date
+                </label>
+                <input
+                  type="date"
+                  value={formData.chart_end_date}
+                  onChange={(e) =>
+                    setFormData({ ...formData, chart_end_date: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Validity Start Date
+                </label>
+                <input
+                  type="date"
+                  value={formData.validity_start_date}
+                  onChange={(e) =>
+                    setFormData({ ...formData, validity_start_date: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Validity End Date
+                </label>
+                <input
+                  type="date"
+                  value={formData.validity_end_date}
+                  onChange={(e) =>
+                    setFormData({ ...formData, validity_end_date: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                />
+              </div>
+
             </div>
             <div className="mt-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
