@@ -39,6 +39,12 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [answers, setAnswers] = useState<{ [questionId: string]: string | string[] }>({})
 
+  
+  const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  'https://bk-seva.onrender.com'
+
   useEffect(() => {
     if (!loading && !user) {
       router.push('/')
@@ -52,7 +58,7 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
 
   const fetchForm = async () => {
     try {
-      const response = await fetch(`/api/forms/${params.formId}`, {
+      const response = await fetch(`${API_BASE}/forms/${params.formId}`, {
         headers: getAuthHeaders()
       })
       
@@ -136,7 +142,7 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
         answers: processedAnswers
       }
 
-      const response = await fetch(`/api/forms/${params.formId}/submit`, {
+      const response = await fetch(`${API_BASE}/forms/${params.formId}/submit`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(responseData)
