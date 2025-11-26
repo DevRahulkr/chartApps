@@ -69,18 +69,38 @@ export default function RegisterPage() {
 
   const password = watch('password')
 
-  const onSubmit = async (data: RegisterForm) => {
-    setIsLoading(true)
-    try {
-      await registerUser(data.email, data.username, data.password, data.fullName)
-      toast.success('Registration successful!')
-      router.push("/");
-    } catch (error: any) {
-      toast.error(error.message || 'Registration failed')
-    } finally {
-      setIsLoading(false)
-    }
+const onSubmit = async (data: RegisterForm) => {
+  setIsLoading(true)
+
+  const payload = {
+    email: data.email,
+    username: selectedDialCode
+      ? `${selectedDialCode}${data.PhoneNumber}`
+      : data.PhoneNumber,
+    full_name: data.fullName,
+    role: 'user',
+    gender: data.gender.toLowerCase(),
+    password: data.password,
+    city: data.City,
+    state: data.State,
+    country: data.Country,
+    bk_centre: data.BKCentre,
+    phone_number: selectedDialCode
+      ? `${selectedDialCode}${data.PhoneNumber}`
+      : data.PhoneNumber,
   }
+
+  try {
+    await registerUser(payload)   // 👈 calls AuthContext.register
+    toast.success('Registration successful!')
+    router.push('/')
+  } catch (error: any) {
+    console.error('Register page error:', error)
+    toast.error(error.message || 'Registration failed')
+  } finally {
+    setIsLoading(false)
+  }
+}
 
   // Show loading while checking authentication
   if (loading) {
@@ -195,7 +215,7 @@ export default function RegisterPage() {
                     message: 'City must be at least 3 characters',
                   },
                   pattern: {
-                    value: /^[a-zA-Z0-9_]+$/,
+                    value: /^[a-zA-Z0-9 _\-@#$%.,]+$/,
                     message: 'City can only contain letters, numbers, and underscores',
                   },
                 })}
@@ -222,7 +242,7 @@ export default function RegisterPage() {
                     message: 'State must be at least 3 characters',
                   },
                   pattern: {
-                    value: /^[a-zA-Z0-9_]+$/,
+                    value: /^[a-zA-Z0-9 _\-@#$%.,]+$/,
                     message: 'State can only contain letters, numbers, and underscores',
                   },
                 })}
@@ -274,7 +294,7 @@ export default function RegisterPage() {
                     message: 'BKCentre must be at least 3 characters',
                   },
                   pattern: {
-                    value: /^[a-zA-Z0-9_]+$/,
+                    value: /^[a-zA-Z0-9 _\-@#$%.,]+$/,
                     message: 'BKCentre can only contain letters, numbers, and underscores',
                   },
                 })}

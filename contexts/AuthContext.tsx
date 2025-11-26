@@ -15,11 +15,25 @@ interface User {
   created_at: string
 }
 
+interface RegisterPayload {
+  email: string
+  username: string
+  full_name: string
+  role: string
+  gender: string
+  password: string
+  city: string
+  state: string
+  country: string
+  bk_centre: string
+  phone_number: string
+}
+
 interface AuthContextType {
   user: User | null
   loading: boolean
   login: (emailOrUsername: string, password: string) => Promise<void>
-  register: (email: string, username: string, password: string, fullName: string) => Promise<void>
+  register: (payload: RegisterPayload) => Promise<void> 
   logout: () => void
   refreshToken: () => Promise<void>
 }
@@ -77,15 +91,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const register = async (email: string, username: string, password: string, fullName: string) => {
-    try {
-      await api.post('/register', { email, username, password, full_name: fullName })
-      // After successful registration, log the user in
-      await login(email, password)
-    } catch (error: any) {
-      throw new Error(error.response?.data?.detail || 'Registration failed')
-    }
+const register = async (payload: RegisterPayload) => {
+  try {
+
+    // if your api has baseURL = 'https://bk-seva.onrender.com'
+    const res = await api.post('/register', payload)
+
+    // After successful registration, log the user in
+    await login(payload.email, payload.password)
+  } catch (error: any) {
+    console.error('AuthContext.register error:', error?.response || error)
+    throw new Error(
+      error?.response?.data?.detail ||
+      error?.response?.data?.message ||
+      'Registration failed'
+    )
   }
+}
 
   const logout = () => {
     Cookies.remove('access_token')
