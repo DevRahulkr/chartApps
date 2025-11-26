@@ -164,9 +164,9 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
 
   if (loading || isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-[#f9f7f3] flex items-center justify-center px-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b08d57] mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading form...</p>
         </div>
       </div>
@@ -178,159 +178,157 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">{form.title}</h1>
-              <p className="text-gray-600">{form.description}</p>
-            </div>
-            <Link
-              href="/profile/dashboard"
-              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-            >
-              Back to Dashboard
-            </Link>
+    <div className="min-h-screen bg-[#f9f7f3] py-8 px-4 sm:py-10">
+      <div className="max-w-4xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm px-5 sm:px-8 py-5 sm:py-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">{form.title}</h1>
+            <p className="mt-1 text-sm text-gray-600">{form.description}</p>
           </div>
+          <Link
+            href="/profile/dashboard"
+            className="w-full sm:w-auto logout-btn btn-back"
+          >
+            Back to Dashboard
+          </Link>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {isLoading ? (
-          <div className="text-center py-8">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading form...</p>
-          </div>
-        ) : !form ? (
-          <div className="text-center py-8">
-            <p className="text-red-600">Form not found</p>
-          </div>
-        ) : !form.questions || form.questions.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-red-600">Form has no questions</p>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {form.questions.map((question, index) => (
-            <div key={question.id} className="bg-white rounded-lg shadow p-6">
-              <div className="mb-4">
-                <label className="block text-lg font-bold text-gray-900">
-                  {index + 1}. {question.text}
-                  {question.required && <span className="text-red-500 ml-1">*</span>}
-                </label>
-              </div>
-
-              <div className="space-y-4">
-                {question.type === 'text' && (
-                  <input
-                    type="text"
-                    value={answers[question.id] as string || ''}
-                    onChange={(e) => handleAnswerChange(question.id, e.target.value)}
-                    placeholder={question.placeholder || 'Enter your answer'}
-                    className="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 font-medium"
-                    required={question.required}
-                  />
-                )}
-
-                {question.type === 'textarea' && (
-                  <textarea
-                    value={answers[question.id] as string || ''}
-                    onChange={(e) => handleAnswerChange(question.id, e.target.value)}
-                    placeholder={question.placeholder || 'Enter your answer'}
-                    rows={4}
-                    className="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 font-medium"
-                    required={question.required}
-                  />
-                )}
-
-                {question.type === 'number' && (
-                  <input
-                    type="number"
-                    value={answers[question.id] as string || ''}
-                    onChange={(e) => handleAnswerChange(question.id, e.target.value)}
-                    placeholder={question.placeholder || 'Enter a number'}
-                    className="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 font-medium"
-                    required={question.required}
-                  />
-                )}
-
-                {question.type === 'date' && (
-                  <input
-                    type="date"
-                    value={answers[question.id] as string || ''}
-                    onChange={(e) => handleAnswerChange(question.id, e.target.value)}
-                    className="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 font-medium"
-                    required={question.required}
-                  />
-                )}
-
-                {['multiple_choice', 'radio'].includes(question.type) && question.options && (
-                  <div className="space-y-2">
-                    {question.options.map((option) => (
-                      <label key={option.id} className="flex items-center">
-                        <input
-                          type="radio"
-                          name={`question_${question.id}`}
-                          value={option.id}
-                          checked={answers[question.id] === option.id}
-                          onChange={(e) => handleAnswerChange(question.id, e.target.value)}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-                          required={question.required}
-                        />
-                        <span className="ml-2 text-sm text-gray-900">{option.text}</span>
-                      </label>
-                    ))}
-                  </div>
-                )}
-
-                {question.type === 'checkbox' && question.options && (
-                  <div className="space-y-2">
-                    {question.options.map((option) => (
-                      <label key={option.id} className="flex items-center">
-                        <input
-                          type="checkbox"
-                          value={option.id}
-                          checked={(answers[question.id] as string[] || []).includes(option.id)}
-                          onChange={(e) => {
-                            const currentAnswers = answers[question.id] as string[] || []
-                            if (e.target.checked) {
-                              handleAnswerChange(question.id, [...currentAnswers, option.id])
-                            } else {
-                              handleAnswerChange(question.id, currentAnswers.filter(id => id !== option.id))
-                            }
-                          }}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                        />
-                        <span className="ml-2 text-sm text-gray-900">{option.text}</span>
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </div>
+        {/* Main Content */}
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5 sm:p-8">
+          {isLoading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b08d57] mx-auto"></div>
+              <p className="mt-4 text-gray-600">Loading form...</p>
             </div>
-          ))}
+          ) : !form ? (
+            <div className="text-center py-8">
+              <p className="text-red-600">Form not found</p>
+            </div>
+          ) : !form.questions || form.questions.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-red-600">Form has no questions</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {form.questions.map((question, index) => (
+                <div key={question.id} className="border border-gray-100 rounded-xl p-5 sm:p-6 hover:border-ring/40 transition-colors">
+                  <div className="mb-4">
+                    <label className="block text-lg font-semibold text-gray-900">
+                      {index + 1}. {question.text}
+                      {question.required && <span className="text-red-500 ml-1">*</span>}
+                    </label>
+                  </div>
 
-          {/* Submit Button */}
-          <div className="flex justify-end space-x-4">
-            <Link
-              href="/profile/dashboard"
-              className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-lg font-medium transition-colors"
-            >
-              Cancel
-            </Link>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-medium transition-colors"
-            >
-              {isSubmitting ? 'Submitting...' : 'Submit Form'}
-            </button>
-          </div>
-        </form>
-        )}
+                  <div className="space-y-4">
+                    {question.type === 'text' && (
+                      <input
+                        type="text"
+                        value={(answers[question.id] as string) || ''}
+                        onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+                        placeholder={question.placeholder || 'Enter your answer'}
+                        className="input-field"
+                        required={question.required}
+                      />
+                    )}
+
+                    {question.type === 'textarea' && (
+                      <textarea
+                        value={(answers[question.id] as string) || ''}
+                        onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+                        placeholder={question.placeholder || 'Enter your answer'}
+                        rows={4}
+                        className="input-field"
+                        required={question.required}
+                      />
+                    )}
+
+                    {question.type === 'number' && (
+                      <input
+                        type="number"
+                        value={(answers[question.id] as string) || ''}
+                        onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+                        placeholder={question.placeholder || 'Enter a number'}
+                        className="input-field"
+                        required={question.required}
+                      />
+                    )}
+
+                    {question.type === 'date' && (
+                      <input
+                        type="date"
+                        value={(answers[question.id] as string) || ''}
+                        onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+                        className="input-field"
+                        required={question.required}
+                      />
+                    )}
+
+                    {['multiple_choice', 'radio'].includes(question.type) && question.options && (
+                      <div className="space-y-2">
+                        {question.options.map((option) => (
+                          <label key={option.id} className="flex items-center">
+                            <input
+                              type="radio"
+                              name={`question_${question.id}`}
+                              value={option.id}
+                              checked={answers[question.id] === option.id}
+                              onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+                              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                              required={question.required}
+                            />
+                            <span className="ml-2 text-sm text-gray-900">{option.text}</span>
+                          </label>
+                        ))}
+                      </div>
+                    )}
+
+                    {question.type === 'checkbox' && question.options && (
+                      <div className="space-y-2">
+                        {question.options.map((option) => (
+                          <label key={option.id} className="flex items-center">
+                            <input
+                              type="checkbox"
+                              value={option.id}
+                              checked={((answers[question.id] as string[]) || []).includes(option.id)}
+                              onChange={(e) => {
+                                const currentAnswers = (answers[question.id] as string[]) || []
+                                if (e.target.checked) {
+                                  handleAnswerChange(question.id, [...currentAnswers, option.id])
+                                } else {
+                                  handleAnswerChange(question.id, currentAnswers.filter(id => id !== option.id))
+                                }
+                              }}
+                              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                            />
+                            <span className="ml-2 text-sm text-gray-900">{option.text}</span>
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {/* Submit Button */}
+                <div className="flex flex-col gap-3 sm:flex-row sm:justify-end sm:items-center">
+                <Link
+                  href="/profile/dashboard"
+                    className="w-full sm:w-auto btn-outline"
+                >
+                  Cancel
+                </Link>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                    className="w-full sm:w-auto btn-primary disabled:bg-gray-400"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit Form'}
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   )

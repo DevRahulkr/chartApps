@@ -112,17 +112,19 @@ const fetchUserResponses = async () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
+      <div className="border-b bg-white shadow-sm">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">My Dashboard</h1>
-              <p className="text-gray-600">View and submit available charts, see your responses</p>
+              <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">My Dashboard</h1>
+              <p className="mt-1 text-sm text-gray-600 sm:text-base">
+                View and submit available charts, see your responses
+              </p>
             </div>
-            <div className="flex space-x-4">
+            <div className="flex flex-wrap gap-3 sm:gap-4">
               <Link
                 href="/profile/dashboard"
-                className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="w-full sm:w-auto logout-btn btn-back"
               >
                 Back to Dashboard
               </Link>
@@ -158,7 +160,7 @@ const fetchUserResponses = async () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {activeTab === 'forms' ? (
           <>
             {/* Month Selector */}

@@ -181,17 +181,17 @@ export default function EditUserResponse({ params }: { params: { formId: string 
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
+          <div className="flex flex-col gap-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Edit Your Response</h1>
-              <p className="text-gray-600">{form.title}</p>
-              <p className="text-sm text-gray-500">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Edit Your Response</h1>
+              <p className="mt-1 text-sm text-gray-600">{form.title}</p>
+              <p className="mt-1 text-xs sm:text-sm text-gray-500">
                 Last submitted on {new Date(response.submitted_at).toLocaleString()}
               </p>
             </div>
             <Link
               href="/profile/dashboard"
-              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              className="w-full sm:w-auto logout-btn btn-back"
             >
               Back to Dashboard
             </Link>
@@ -201,7 +201,7 @@ export default function EditUserResponse({ params }: { params: { formId: string 
 
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
+        <div className="bg-white rounded-lg shadow p-5 sm:p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Form Details</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
@@ -223,7 +223,7 @@ export default function EditUserResponse({ params }: { params: { formId: string 
           <h2 className="text-xl font-bold text-gray-900">Edit Your Answers</h2>
 
           {form.questions.map((question, index) => (
-            <div key={question.id} className="bg-white rounded-lg shadow p-6">
+            <div key={question.id} className="bg-white rounded-lg shadow p-5 sm:p-6">
               <div className="mb-4">
                 <h3 className="text-lg font-bold text-gray-900">
                   {index + 1}. {question.text}
@@ -236,7 +236,7 @@ export default function EditUserResponse({ params }: { params: { formId: string 
                   type="text"
                   value={answersState[question.id] ?? ''}
                   onChange={(e) => handleAnswerChange(question.id, e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                  className="input-field"
                   placeholder="Enter your answer"
                 />
               </div>
@@ -245,16 +245,16 @@ export default function EditUserResponse({ params }: { params: { formId: string 
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-end space-x-4 mt-8">
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-end sm:space-x-4">
           <Link
             href="/user/myresponses"
-            className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-lg font-medium transition-colors"
+            className="w-full sm:w-auto text-center btn-outline"
           >
             Cancel
           </Link>
           <button
             onClick={handleUpdateResponse}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+            className="w-full sm:w-auto text-center btn-primary"
           >
             Update Response
           </button>

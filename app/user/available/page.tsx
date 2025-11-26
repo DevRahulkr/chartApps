@@ -73,25 +73,25 @@ const fetchForms = async () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Available Charts</h1>
-            <p className="text-gray-600">Submit your pending Charts</p>
+    <div className="min-h-screen bg-[#f9f7f3]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <div className="max-w-5xl mx-auto space-y-8">
+          {/* Header card – matches profile style */}
+          <div className="bg-white border border-gray-100 rounded-2xl shadow-sm px-6 sm:px-8 py-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">Available Charts</h1>
+              <p className="mt-2 text-sm text-gray-600">Submit your pending charts</p>
+            </div>
+            <Link
+              href="/profile/dashboard"
+              className="w-full sm:w-auto logout-btn btn-back"
+            >
+              Back to Dashboard
+            </Link>
           </div>
-          <Link
-            href="/profile/dashboard"
-            className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium"
-          >
-            Back to Dashboard
-          </Link>
-        </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <div className="flex items-center space-x-4">
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:space-x-4">
             <label htmlFor="month" className="text-sm font-medium text-gray-700">
               Select Month:
             </label>
@@ -100,23 +100,24 @@ const fetchForms = async () => {
               id="month"
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="w-full max-w-[200px] input-field"
             />
             <button
               onClick={fetchForms}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium"
+              className="w-full sm:w-auto btn-primary"
             >
               Refresh
             </button>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow divide-y divide-gray-200">
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm divide-y divide-gray-200">
           {forms.length === 0 ? (
             <div className="text-center py-12 text-gray-500">No forms available</div>
           ) : (
             forms.map((form) => <FormCard key={form.id} form={form} />)
           )}
+        </div>
         </div>
       </div>
     </div>
@@ -125,8 +126,8 @@ const fetchForms = async () => {
 
 function FormCard({ form }: { form: Form }) {
   return (
-    <div className="px-6 py-4 hover:bg-gray-50 flex justify-between items-center">
-      <div>
+    <div className="px-4 sm:px-6 py-4 hover:bg-gray-50 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="max-w-xl">
         <h3 className="text-lg font-bold text-gray-900">{form.title}</h3>
         <p className="text-sm text-gray-700">{form.description}</p>
         <div className="text-sm text-gray-600 mt-1">
@@ -135,7 +136,7 @@ function FormCard({ form }: { form: Form }) {
       </div>
       <Link
         href={`/user/forms/${form.id}/submit`}
-        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
+        className="mt-2 sm:mt-0 w-full sm:w-auto text-center btn-primary"
       >
         Submit Form
       </Link>

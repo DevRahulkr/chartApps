@@ -55,55 +55,56 @@ const fetchResponses = async () => {
 
   if (loading || isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Loading...</p>
+      <div className="min-h-screen bg-[#f9f7f3] flex items-center justify-center px-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b08d57] mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading responses...</p>
+        </div>
       </div>
     )
   }
 
   return (
-  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+  <div className="min-h-screen bg-[#f9f7f3] py-10 px-4">
+      <div className="max-w-5xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm px-8 py-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">My Charts</h1>
-            <p className="text-gray-600">All Charts you’ve submitted</p>
+            <h1 className="text-3xl font-semibold text-gray-900">My Charts</h1>
+            <p className="text-sm text-gray-600">All charts you’ve submitted</p>
           </div>
           <Link
             href="/profile/dashboard"
-            className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium"
+            className="logout-btn btn-back"
           >
             Back to Dashboard
           </Link>
         </div>
-      </div>
 
-      {/* ✅ Month Filter Section */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <div className="flex items-center space-x-4">
+        {/* Month Filter Section */}
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center">
             <label htmlFor="month" className="text-sm font-medium text-gray-700">
-              Select Month:
+              Select Month
             </label>
             <input
               type="month"
               id="month"
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="input-field max-w-[200px]"
             />
             <button
               onClick={fetchResponses}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium"
+              className="btn-primary"
             >
               Refresh
             </button>
           </div>
         </div>
 
-        {/* ✅ Responses List */}
-        <div className="bg-white rounded-lg shadow divide-y divide-gray-200">
+        {/* Responses List */}
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm divide-y divide-gray-100">
           {responses.length === 0 ? (
             <div className="text-center py-12 text-gray-500">No responses found</div>
           ) : (
@@ -124,7 +125,7 @@ function ResponseCard({ response }: { response: UserResponse }) {
   })
   const adminBase = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.NEXT_PUBLIC_API_URL || 'https://bk-seva.onrender.com'
   return (
-    <div className="px-6 py-4 hover:bg-gray-50 flex justify-between items-center">
+    <div className="px-6 py-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between hover:bg-gray-50">
       <div>
         {/* <h3 className="text-lg font-bold text-gray-900">
           Response #{response.id.slice(-6)}
@@ -149,13 +150,13 @@ function ResponseCard({ response }: { response: UserResponse }) {
       <div className="flex items-center space-x-2">
         <Link
           href={`/user/forms/${response.form_id}/response`}
-          className="text-blue-600 hover:text-blue-900 text-sm font-medium"
+          className="logout-btn text-[#b08d57] hover:text-[#a3824d] text-sm font-medium"
         >
           View Full Response
         </Link>
         <Link
           href={`/user/forms/${response.form_id}/response/${response.id}/edit`}
-          className="text-indigo-600 hover:text-indigo-900 text-sm font-medium"
+          className="logout-btn text-[#b08d57] hover:text-[#a3824d] text-sm font-medium"
         >
           Edit
         </Link>

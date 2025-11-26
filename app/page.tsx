@@ -28,16 +28,18 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-      <div className="max-w-md w-full space-y-8 p-8">
+      <div className="w-full max-w-md space-y-8 px-4 py-10 sm:px-8">
         <div className="text-center">
-           <div className="flex justify-center mb-6">
-                    <Image
-                      src="/return%20to%20the%20source.svg"  
-                      alt="Return to the Source"
-                      width={600}  
-                      height={600} 
-                    />
-                  </div>
+          <div className="mb-6 flex justify-center">
+            <Image
+              src="/return%20to%20the%20source.svg"
+              alt="Return to the Source"
+              width={200}
+              height={200}
+              className="h-20 w-auto sm:h-24 md:h-28"
+              priority
+            />
+          </div>
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
             Self Progress Chart
           </h2>

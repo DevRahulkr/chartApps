@@ -92,14 +92,15 @@ export function AuthDialog({
       >
         <div className="flex flex-col items-center gap-2">
           <div
-            className="flex shrink-0 items-center justify-center rounded-full border border-border"
+            className="flex shrink-0 items-center justify-center rounded-full border border-border bg-white/40 p-2"
             aria-hidden="true"
           >
             <Image
               src="/return%20to%20the%20source.svg"  
               alt="Return to the Source"
-              width={600}  
-              height={600} 
+              width={160}
+              height={160}
+              className="h-14 w-auto sm:h-16"
             />
           </div>
           <DialogHeader>

@@ -114,9 +114,9 @@ export default function ViewResponse({ params }: { params: { formId: string } })
 
   if (loading || isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-[#f9f7f3] flex items-center justify-center px-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b08d57] mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading response...</p>
         </div>
       </div>
@@ -128,32 +128,26 @@ export default function ViewResponse({ params }: { params: { formId: string } })
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Your Response</h1>
-              <p className="text-gray-600">{form.title}</p>
-              <p className="text-sm text-gray-500">
-                Submitted on {new Date(response.submitted_at).toLocaleString()}
-              </p>
-            </div>
-            <Link
-              href="/profile/dashboard"
-              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-            >
-              Back to Dashboard
-            </Link>
+    <div className="min-h-screen bg-[#f9f7f3] py-10 px-4">
+      <div className="max-w-4xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm px-6 sm:px-8 py-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-3xl font-semibold text-gray-900">Your Response</h1>
+            <p className="text-sm text-gray-600">{form.title}</p>
+            <p className="text-xs text-gray-500">Submitted on {new Date(response.submitted_at).toLocaleString()}</p>
           </div>
+          <Link
+            href="/profile/dashboard"
+            className="logout-btn bg-[#b08d57] hover:bg-[#a3824d] text-white px-5 py-2.5 rounded-xl font-medium transition-colors"
+          >
+            Back to Dashboard
+          </Link>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Form Details</h2>
+        {/* Form Details */}
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Form Details</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
               <span className="font-medium text-gray-700">Title:</span>
@@ -174,32 +168,31 @@ export default function ViewResponse({ params }: { params: { formId: string } })
           </div>
         </div>
 
-        <div className="space-y-6">
-          <h2 className="text-xl font-bold text-gray-900">Your Answers</h2>
-          
-          {form.questions.map((question, index) => (
-            <div key={question.id} className="bg-white rounded-lg shadow p-6">
-              <div className="mb-4">
-                <h3 className="text-lg font-bold text-gray-900">
-                  {index + 1}. {question.text}
-                  {question.required && <span className="text-red-500 ml-1">*</span>}
-                </h3>
+        {/* Answers */}
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">Your Answers</h2>
+          <div className="space-y-6">
+            {form.questions.map((question, index) => (
+              <div key={question.id} className="border border-gray-100 rounded-xl p-6 hover:border-[#b08d57]/40 transition-colors">
+                <div className="mb-3">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {index + 1}. {question.text}
+                    {question.required && <span className="text-red-500 ml-1">*</span>}
+                  </h3>
+                </div>
+                <div className="bg-[#f9f7f3] rounded-xl p-4">
+                  <p className="text-gray-900 font-medium">{getAnswerForQuestion(question.id)}</p>
+                </div>
               </div>
-              
-              <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-gray-900 font-medium">
-                  {getAnswerForQuestion(question.id)}
-                </p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex justify-end space-x-4 mt-8">
+        {/* Action Button */}
+        <div className="flex justify-end">
           <Link
             href="/profile/dashboard"
-            className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-lg font-medium transition-colors"
+            className="logout-btn border border-gray-200 text-gray-700 px-5 py-2.5 rounded-xl font-medium text-center hover:bg-gray-100 transition-colors"
           >
             Back to Dashboard
           </Link>
