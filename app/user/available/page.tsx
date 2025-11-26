@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -33,24 +33,24 @@ export default function AvailableFormsPage() {
   const [forms, setForms] = useState<Form[]>([])
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7))
   const [isLoading, setIsLoading] = useState(true)
-  const hasFetchedRef = useRef(false)
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/')
       return
     }
-    if (user && !hasFetchedRef.current) {
-      hasFetchedRef.current = true
-      fetchForms()
+
+    if (user) {
+      fetchForms(selectedMonth)
     }
-  }, [user, loading, router])
+  }, [user, loading, router, selectedMonth])
 
 const token = Cookies.get("access_token")
 
-const fetchForms = async () => {
+const fetchForms = async (month = selectedMonth) => {
   try {
-    const res = await api.get(`/forms/month/${selectedMonth}`, {
+    setIsLoading(true)
+    const res = await api.get(`/forms/month/${month}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
 
@@ -101,7 +101,7 @@ const fetchForms = async () => {
               className="border border-gray-200 rounded-lg px-4 py-2 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#b08d57]/60 focus:border-[#b08d57]"
             />
             <button
-              onClick={fetchForms}
+              onClick={() => fetchForms(selectedMonth)}
               className="logout-btn bg-[#b08d57] hover:bg-[#a3824d] text-white px-5 py-2.5 rounded-xl font-medium transition-colors"
             >
               Refresh
