@@ -3,13 +3,18 @@
 import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import Image from "next/image"
+import Image from 'next/image'
+import { api } from '@/lib/api'
 
 export default function ProfileDashboard() {
   const { user, loading, logout } = useAuth()
   const router = useRouter()
+  const [resetIdentifier, setResetIdentifier] = useState('')
+  const [resetPassword, setResetPassword] = useState('')
+  const [isResetLoading, setIsResetLoading] = useState(false)
+
   useEffect(() => {
     if (!loading && !user) {
       router.push('/')
@@ -21,7 +26,38 @@ export default function ProfileDashboard() {
     toast.success('Logged out successfully!')
   }
 
-    const today = new Date().toLocaleDateString('en-IN', {
+  const handleResetPassword = async () => {
+    if (!user || user.role !== 'admin') {
+      toast.error('Admin access required to reset passwords.')
+      return
+    }
+
+    if (!resetIdentifier.trim() || !resetPassword.trim()) {
+      toast.error('Please enter user identifier and new password.')
+      return
+    }
+
+    try {
+      setIsResetLoading(true)
+      await api.post('/admin/users/reset-password', {
+        user_identifier: resetIdentifier.trim(),
+        new_password: resetPassword,
+      })
+      toast.success('Password reset successfully.')
+      setResetIdentifier('')
+      setResetPassword('')
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.detail ||
+        error?.message ||
+        'Failed to reset password.'
+      toast.error(message)
+    } finally {
+      setIsResetLoading(false)
+    }
+  }
+
+  const today = new Date().toLocaleDateString('en-IN', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -73,27 +109,88 @@ export default function ProfileDashboard() {
 
         {/* Action Buttons */}
         <div className="space-y-3">
-          <Link
-            href="/user/available"
-            className="flex flex-col gap-3 rounded-lg border border-gray-200 p-4 transition hover:bg-gray-50 sm:flex-row sm:items-center sm:justify-between"
-          >
-            <div className="flex items-center space-x-3">
-              <span className="text-[#b08d57]">🧘‍♂️</span>
-              <span className="logout-btn text-gray-800 font-medium">Fill Chart</span>
-            </div>
-            <span className="text-gray-400 self-end text-lg sm:self-auto">{'>'}</span>
-          </Link>
+          {/* Admin dashboard shortcut for admins */}
+          {user.role === 'admin' && (
+            <Link
+              href="/admin/dashboard"
+              className="flex flex-col gap-3 rounded-lg border border-gray-200 p-4 transition hover:bg-gray-50 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div className="flex items-center space-x-3">
+                <span className="text-[#b08d57]">👑</span>
+                <span className="logout-btn text-gray-800 font-medium">Admin Dashboard</span>
+              </div>
+              <span className="text-gray-400 self-end text-lg sm:self-auto">{'>'}</span>
+            </Link>
+          )}
 
-          <Link
-            href="/user/myresponses"
-            className="flex flex-col gap-3 rounded-lg border border-gray-200 p-4 transition hover:bg-gray-50 sm:flex-row sm:items-center sm:justify-between"
-          >
-            <div className="flex items-center space-x-3">
-              <span className="text-[#b08d57]">📄</span>
-              <span className="logout-btn text-gray-800 font-medium">View Previous Chart</span>
+          {/* Admin-only: Reset user password */}
+          {user.role === 'admin' && (
+            <div className="rounded-lg border border-gray-200 p-4 shadow-sm">
+              <div className="mb-3 flex items-center space-x-3">
+                <span className="text-[#b08d57]">🔐</span>
+                <div>
+                  <p className="logout-btn text-gray-800 font-medium">
+                    Reset User Password
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Enter user identifier (email or username) and new password.
+                  </p>
+                </div>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <input
+                  type="text"
+                  placeholder="User identifier (email / username)"
+                  value={resetIdentifier}
+                  onChange={(e) => setResetIdentifier(e.target.value)}
+                  className="input-field"
+                />
+                <input
+                  type="password"
+                  placeholder="New password"
+                  value={resetPassword}
+                  onChange={(e) => setResetPassword(e.target.value)}
+                  className="input-field"
+                />
+              </div>
+              <div className="mt-3 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleResetPassword}
+                  disabled={isResetLoading}
+                  className="w-full sm:w-auto btn-primary"
+                >
+                  {isResetLoading ? 'Resetting...' : 'Reset Password'}
+                </button>
+              </div>
             </div>
-            <span className="text-gray-400 self-end text-lg sm:self-auto">{'>'}</span>
-          </Link>
+          )}
+
+          {user.role !== 'admin' && (
+            <Link
+              href="/user/available"
+              className="flex flex-col gap-3 rounded-lg border border-gray-200 p-4 transition hover:bg-gray-50 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div className="flex items-center space-x-3">
+                <span className="text-[#b08d57]">🧘‍♂️</span>
+                <span className="logout-btn text-gray-800 font-medium">Fill Chart</span>
+              </div>
+              <span className="text-gray-400 self-end text-lg sm:self-auto">{'>'}</span>
+            </Link>
+          )}
+
+          {user.role !== 'admin' && (
+            <Link
+              href="/user/myresponses"
+              className="flex flex-col gap-3 rounded-lg border border-gray-200 p-4 transition hover:bg-gray-50 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div className="flex items-center space-x-3">
+                <span className="text-[#b08d57]">📄</span>
+                <span className="logout-btn text-gray-800 font-medium">View Previous Chart</span>
+              </div>
+              <span className="text-gray-400 self-end text-lg sm:self-auto">{'>'}</span>
+            </Link>
+          )}
 
           <Link
             href="/profile"

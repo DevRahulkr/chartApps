@@ -102,23 +102,7 @@ export default function ProfilePage() {
               You have successfully logged in to your account. This is a protected route that requires authentication.
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {user.role === 'admin' ? (
-                <Link
-                  href="/admin/dashboard"
-                  className="logout-btn bg-[#b08d57] hover:bg-[#a3824d] text-white px-6 py-3 rounded-xl font-medium text-center transition-colors"
-                >
-                  👑 Admin Dashboard
-                </Link>
-              ) : (
-                <Link
-                  href="/profile/dashboard"
-                  className="logout-btn bg-[#b08d57] hover:bg-[#a3824d] text-white px-6 py-3 rounded-xl font-medium text-center transition-colors"
-                >
-                  📝 View Forms
-                </Link>
-              )}
-            </div>
+            {/* Admin dashboard entry is now shown on profile/dashboard instead */}
           </div>
         )}
       </div>
