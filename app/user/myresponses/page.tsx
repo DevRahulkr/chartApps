@@ -35,7 +35,7 @@ export default function MyResponsesPage() {
     if (user) fetchResponses()
   }, [user, loading, router])
 
-    const token = Cookies.get("access_token")
+  const token = Cookies.get("access_token")
 
 const fetchResponses = async () => {
   try {
@@ -154,7 +154,7 @@ function ResponseCard({ response }: { response: UserResponse }) {
           View Full Response
         </Link>
         <Link
-          href={`/user/forms/${response.form_id}/edit`}
+          href={`/user/forms/${response.form_id}/response/${response.id}/edit`}
           className="text-indigo-600 hover:text-indigo-900 text-sm font-medium"
         >
           Edit

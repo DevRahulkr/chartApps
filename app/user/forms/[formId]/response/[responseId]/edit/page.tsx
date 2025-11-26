@@ -16,6 +16,12 @@ interface Question {
   placeholder?: string
 }
 
+interface Answer {
+  question_id: string
+  question_text: string
+  answer: string | string[]
+}
+
 interface Form {
   id: string
   title: string
@@ -24,13 +30,16 @@ interface Form {
   questions: Question[]
   is_active: boolean
   created_at: string
+  answers: Answer[]
 }
 
-export default function EditForm() {
+export default function EditUserResponsePage() {
   const { user, loading } = useAuth()
   const router = useRouter()
-  const params = useParams()
-  const formId = params.formId as string
+ const { formId, responseId } = useParams() as {
+    formId: string
+    responseId: string
+  }
   
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -45,8 +54,9 @@ export default function EditForm() {
   })
   const [questions, setQuestions] = useState<Question[]>([])
   const [originalForm, setOriginalForm] = useState<Form | null>(null)
+  const [answers, setAnswers] = useState<Answer[]>([])
   const hasFetchedRef = useRef(false)
-
+ 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/')
@@ -71,7 +81,7 @@ const fetchForm = async () => {
 
     const form = res.data
     setOriginalForm(form)
-
+    setAnswers(form.answers || [])
     setFormData({
       title: form.title,
       description: form.description,
@@ -86,7 +96,7 @@ const fetchForm = async () => {
     
   } catch (error) {
     toast.error('Failed to load form')
-    router.push('/admin/dashboard')
+    router.push('/user/myresponses')
   } finally {
     setIsLoading(false)
   }
@@ -163,14 +173,14 @@ const fetchForm = async () => {
 
     try {
       const payload = {
-        ...formData,
-        questions: questions.filter(q => q.text.trim() !== '')
+        form_id: formId,
+        answers: answers
       }
 
-      const response = await api.put(`/admin/forms/${formId}`, payload)
+      const response = await api.put(`/forms/${formId}/responses/${responseId}`, payload)
 
       toast.success('Form updated successfully!')
-      router.push('/admin/dashboard')
+      router.push('/user/myresponses')
     } catch (err: any) {
       toast.error(err?.response?.data?.detail || 'Failed to update form')
     } finally {
@@ -464,7 +474,7 @@ const fetchForm = async () => {
           {/* Submit Button */}
           <div className="flex justify-end space-x-4">
             <Link
-              href="/admin/dashboard"
+              href="/user/myresponses"
               className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
             >
               Cancel
