@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -33,35 +33,32 @@ export default function AvailableFormsPage() {
   const [forms, setForms] = useState<Form[]>([])
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7))
   const [isLoading, setIsLoading] = useState(true)
-  const hasFetchedRef = useRef(false)
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/')
       return
     }
-    if (user && !hasFetchedRef.current) {
-      hasFetchedRef.current = true
-      fetchForms()
+    if (user) {
+      fetchForms(selectedMonth)
     }
-  }, [user, loading, router])
+  }, [user, loading, router, selectedMonth])
 
-const token = Cookies.get("access_token")
+  const token = Cookies.get('access_token')
 
-const fetchForms = async () => {
-  try {
-    const res = await api.get(`/forms/month/${selectedMonth}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+  const fetchForms = async (month: string) => {
+    try {
+      const res = await api.get(`/forms/month/${month}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
 
-    setForms(res.data)
-    
-  } catch (err) {
-    toast.error('Error fetching forms')
-  } finally {
-    setIsLoading(false)
+      setForms(res.data)
+    } catch (err) {
+      toast.error('Error fetching forms')
+    } finally {
+      setIsLoading(false)
+    }
   }
-}
 
 
   if (loading || isLoading) {
@@ -103,7 +100,7 @@ const fetchForms = async () => {
               className="w-full max-w-[200px] input-field"
             />
             <button
-              onClick={fetchForms}
+              onClick={() => fetchForms(selectedMonth)}
               className="w-full sm:w-auto btn-primary"
             >
               Refresh
