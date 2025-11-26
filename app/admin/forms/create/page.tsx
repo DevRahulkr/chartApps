@@ -26,7 +26,9 @@ export default function CreateForm() {
     description: '',
     month: new Date().toISOString().slice(0, 7), // Current month in YYYY-MM format
     chart_start_date: '',
-    chart_end_date: ''
+    chart_end_date: '',  
+    validity_start_date: '',      
+    validity_end_date: '' 
   })
   const [questions, setQuestions] = useState<Question[]>([
     {
@@ -230,6 +232,39 @@ const handleSubmit = async (e: React.FormEvent) => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                 />
               </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Validity Start Date *
+              </label>
+              <input
+                type="date"
+                required
+                value={formData.validity_start_date}
+                onChange={(e) =>
+                  setFormData({ ...formData, validity_start_date: e.target.value })
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* ✅ NEW FIELD */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Validity End Date *
+              </label>
+              <input
+                type="date"
+                required
+                value={formData.validity_end_date}
+                onChange={(e) =>
+                  setFormData({ ...formData, validity_end_date: e.target.value })
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
             </div>
             <div className="mt-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">

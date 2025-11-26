@@ -72,14 +72,19 @@ const fetchForm = async () => {
     const form = res.data
     setOriginalForm(form)
 
+    const toDateInput = (value?: string | null) => {
+      if (!value) return ''
+      return value.split('T')[0]
+    }
+
     setFormData({
       title: form.title,
       description: form.description,
-      month: form.month,
-      chart_start_date: form.chart_start_date || '',
-      chart_end_date: form.chart_end_date || '',
-      validity_start_date: form.validity_start_date || '',
-      validity_end_date: form.validity_end_date || ''
+      month: form.month?.slice(0, 7) || '',      
+      chart_start_date: toDateInput(form.chart_start_date),
+      chart_end_date: toDateInput(form.chart_end_date),
+      validity_start_date: toDateInput(form.validity_start_date),
+      validity_end_date: toDateInput(form.validity_end_date),
     })
 
     setQuestions(form.questions || [])
@@ -91,7 +96,6 @@ const fetchForm = async () => {
     setIsLoading(false)
   }
 }
- console.log(questions,user,'user');
 
   const addQuestion = () => {
     const newQuestion: Question = {
@@ -216,7 +220,6 @@ const fetchForm = async () => {
       </div>
     )
   }
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
