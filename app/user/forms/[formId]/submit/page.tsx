@@ -178,24 +178,24 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f7f3] py-10 px-4">
+    <div className="min-h-screen bg-[#f9f7f3] py-8 px-4 sm:py-10">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm px-6 sm:px-8 py-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm px-5 sm:px-8 py-5 sm:py-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-semibold text-gray-900">{form.title}</h1>
-            <p className="text-sm text-gray-600">{form.description}</p>
+            <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">{form.title}</h1>
+            <p className="mt-1 text-sm text-gray-600">{form.description}</p>
           </div>
           <Link
             href="/profile/dashboard"
-            className="logout-btn bg-[#b08d57] hover:bg-[#a3824d] text-white px-5 py-2.5 rounded-xl font-medium transition-colors"
+            className="w-full sm:w-auto logout-btn btn-back"
           >
             Back to Dashboard
           </Link>
         </div>
 
         {/* Main Content */}
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 sm:p-8">
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5 sm:p-8">
           {isLoading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b08d57] mx-auto"></div>
@@ -212,7 +212,7 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
               {form.questions.map((question, index) => (
-                <div key={question.id} className="border border-gray-100 rounded-xl p-6 hover:border-[#b08d57]/40 transition-colors">
+                <div key={question.id} className="border border-gray-100 rounded-xl p-5 sm:p-6 hover:border-ring/40 transition-colors">
                   <div className="mb-4">
                     <label className="block text-lg font-semibold text-gray-900">
                       {index + 1}. {question.text}
@@ -227,7 +227,7 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
                         value={(answers[question.id] as string) || ''}
                         onChange={(e) => handleAnswerChange(question.id, e.target.value)}
                         placeholder={question.placeholder || 'Enter your answer'}
-                        className="w-full border border-gray-200 rounded-lg px-4 py-2 text-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#b08d57]/60 focus:border-[#b08d57]"
+                        className="input-field"
                         required={question.required}
                       />
                     )}
@@ -238,7 +238,7 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
                         onChange={(e) => handleAnswerChange(question.id, e.target.value)}
                         placeholder={question.placeholder || 'Enter your answer'}
                         rows={4}
-                        className="w-full border border-gray-200 rounded-lg px-4 py-2 text-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#b08d57]/60 focus:border-[#b08d57]"
+                        className="input-field"
                         required={question.required}
                       />
                     )}
@@ -249,7 +249,7 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
                         value={(answers[question.id] as string) || ''}
                         onChange={(e) => handleAnswerChange(question.id, e.target.value)}
                         placeholder={question.placeholder || 'Enter a number'}
-                        className="w-full border border-gray-200 rounded-lg px-4 py-2 text-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#b08d57]/60 focus:border-[#b08d57]"
+                        className="input-field"
                         required={question.required}
                       />
                     )}
@@ -259,7 +259,7 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
                         type="date"
                         value={(answers[question.id] as string) || ''}
                         onChange={(e) => handleAnswerChange(question.id, e.target.value)}
-                        className="w-full border border-gray-200 rounded-lg px-4 py-2 text-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#b08d57]/60 focus:border-[#b08d57]"
+                        className="input-field"
                         required={question.required}
                       />
                     )}
@@ -274,7 +274,7 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
                               value={option.id}
                               checked={answers[question.id] === option.id}
                               onChange={(e) => handleAnswerChange(question.id, e.target.value)}
-                              className="h-4 w-4 text-[#b08d57] focus:ring-[#b08d57] border-gray-300"
+                              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                               required={question.required}
                             />
                             <span className="ml-2 text-sm text-gray-900">{option.text}</span>
@@ -299,7 +299,7 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
                                   handleAnswerChange(question.id, currentAnswers.filter(id => id !== option.id))
                                 }
                               }}
-                              className="h-4 w-4 text-[#b08d57] focus:ring-[#b08d57] border-gray-300 rounded"
+                              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                             />
                             <span className="ml-2 text-sm text-gray-900">{option.text}</span>
                           </label>
@@ -311,17 +311,17 @@ export default function SubmitForm({ params }: { params: { formId: string } }) {
               ))}
 
               {/* Submit Button */}
-              <div className="flex flex-col gap-3 sm:flex-row sm:justify-end sm:items-center">
+                <div className="flex flex-col gap-3 sm:flex-row sm:justify-end sm:items-center">
                 <Link
                   href="/profile/dashboard"
-                  className="logout-btn border border-gray-200 text-gray-700 px-5 py-2.5 rounded-xl font-medium text-center hover:bg-gray-100 transition-colors"
+                    className="w-full sm:w-auto btn-outline"
                 >
                   Cancel
                 </Link>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="logout-btn bg-[#b08d57] hover:bg-[#a3824d] disabled:bg-gray-400 text-white px-6 py-2.5 rounded-xl font-medium transition-colors"
+                    className="w-full sm:w-auto btn-primary disabled:bg-gray-400"
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit Form'}
                 </button>

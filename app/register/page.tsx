@@ -102,14 +102,15 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+      <div className="w-full max-w-md space-y-8">
         <div>
           <div className="flex justify-center mb-6">
             <Image
               src="/return%20to%20the%20source.svg"  
               alt="Return to the Source"
-              width={600}  
-              height={600} 
+              width={200}
+              height={200}
+              className="h-20 w-auto sm:h-24 md:h-28"
             />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -144,7 +145,7 @@ export default function RegisterPage() {
                 })}
                 type="text"
                 autoComplete="name"
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className="mt-1 input-field"
                 placeholder="Enter your full name"
               />
               {errors.fullName && (
@@ -200,7 +201,7 @@ export default function RegisterPage() {
                 })}
                 type="text"
                 autoComplete="City"
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className="mt-1 input-field"
                 placeholder="Enter your City"
               />
               {errors.City && (
@@ -227,7 +228,7 @@ export default function RegisterPage() {
                 })}
                 type="text"
                 autoComplete="State"
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className="mt-1 input-field"
                 placeholder="Enter your State"
               />
               {errors.State && (
@@ -246,7 +247,7 @@ export default function RegisterPage() {
                   const country = countries.find((c) => c.code === e.target.value);
                   if (country) setSelectedDialCode(country.dial_code);
                 }}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-1 input-field"
               >
                 <option value="">Select your country</option>
                 {countries.map((country) => (
@@ -305,7 +306,7 @@ export default function RegisterPage() {
                     },
                   })}
                   type="tel"
-                  className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="flex-1 min-w-0 input-field rounded-l-none"
                   placeholder="Enter your phone number"
                 />
               </div>
@@ -328,7 +329,7 @@ export default function RegisterPage() {
                 })}
                 type="email"
                 autoComplete="email"
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className="mt-1 input-field"
                 placeholder="Enter your email"
               />
               {errors.email && (
@@ -350,7 +351,7 @@ export default function RegisterPage() {
                 })}
                 type="password"
                 autoComplete="new-password"
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className="mt-1 input-field"
                 placeholder="Enter your password"
               />
               {errors.password && (
@@ -370,7 +371,7 @@ export default function RegisterPage() {
                 })}
                 type="password"
                 autoComplete="new-password"
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className="mt-1 input-field"
                 placeholder="Confirm your password"
               />
               {errors.confirmPassword && (
@@ -383,7 +384,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group relative w-full flex justify-center btn-primary"
             >
               {isLoading ? 'Creating account...' : 'Create account'}
             </button>

@@ -107,23 +107,25 @@ const deleteForm = async (formId: string) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
+      <div className="border-b bg-white shadow-sm">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-              <p className="text-gray-600">Manage forms and view responses</p>
+              <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Admin Dashboard</h1>
+              <p className="mt-1 text-sm text-gray-600 sm:text-base">
+                Manage forms and view responses
+              </p>
             </div>
-            <div className="flex space-x-4">
+            <div className="flex flex-wrap gap-3 sm:gap-4">
               <Link
                 href="/admin/forms/create"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="w-full sm:w-auto text-center btn-primary"
               >
                 Create New Form
               </Link>
               <Link
                 href="/profile"
-                className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="w-full sm:w-auto logout-btn btn-back"
               >
                 Back to Profile
               </Link>
@@ -133,7 +135,7 @@ const deleteForm = async (formId: string) => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow p-6">

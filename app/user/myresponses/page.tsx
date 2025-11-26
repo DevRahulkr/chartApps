@@ -75,7 +75,7 @@ const fetchResponses = async () => {
           </div>
           <Link
             href="/profile/dashboard"
-            className="logout-btn bg-[#b08d57] hover:bg-[#a3824d] text-white px-5 py-2.5 rounded-xl font-medium transition-colors"
+            className="logout-btn btn-back"
           >
             Back to Dashboard
           </Link>
@@ -92,11 +92,11 @@ const fetchResponses = async () => {
               id="month"
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="border border-gray-200 rounded-lg px-4 py-2 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#b08d57]/60 focus:border-[#b08d57]"
+              className="input-field max-w-[200px]"
             />
             <button
               onClick={fetchResponses}
-              className="logout-btn bg-[#b08d57] hover:bg-[#a3824d] text-white px-5 py-2.5 rounded-xl font-medium transition-colors"
+              className="btn-primary"
             >
               Refresh
             </button>

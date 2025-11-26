@@ -42,7 +42,7 @@ export default function ProfilePage() {
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/profile/dashboard"
-                className="logout-btn border border-gray-200 text-gray-700 px-5 py-2.5 rounded-xl font-medium text-center hover:bg-gray-100 transition-colors"
+                className="logout-btn btn-back"
               >
                 Back to Dashboard
               </Link>
