@@ -11,6 +11,7 @@ import { api } from '@/lib/api'
 interface UserResponse {
   id: string
   form_id: string
+  form_title?: string
   user_id: string
   answers: Array<{
     question_id: string
@@ -126,12 +127,14 @@ function ResponseCard({ response }: { response: UserResponse }) {
   const adminBase = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.NEXT_PUBLIC_API_URL || 'https://bk-seva.onrender.com'
   return (
     <div className="px-6 py-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between hover:bg-gray-50">
-      <div>
-        {/* <h3 className="text-lg font-bold text-gray-900">
-          Response #{response.id.slice(-6)}
-        </h3> */}
+      <div className="flex-1">
+        {response.form_title && (
+          <h3 className="text-lg font-bold text-gray-900 mb-1">
+            {response.form_title}
+          </h3>
+        )}
         <p className="text-sm text-gray-600">
-          Submitted on {dateAnswer ? formatAnswer(dateAnswer.answer) : "N/A"}
+          Submitted on {dateAnswer ? formatAnswer(dateAnswer.answer) : new Date(response.submitted_at).toLocaleDateString()}
         </p>
         {/* <div className="mt-2 space-y-1">
           {response.answers.slice(0, 2).map((ans, i) => (
