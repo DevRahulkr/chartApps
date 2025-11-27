@@ -99,10 +99,10 @@ export function LoginDialog({ children, onSuccess }: LoginDialogProps) {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor={`${id}-email`}>Email or Username</Label>
+              <Label htmlFor={`${id}-email`}>Email or Phone Number</Label>
               <Input
                 id={`${id}-email`}
-                placeholder="hi@yourcompany.com or username"
+                placeholder="hi@yourcompany.com or Phone Number"
                 type="text"
                 {...register("emailOrUsername", {
                   required: "Email or username is required",

@@ -121,7 +121,7 @@ export function AuthDialog({
               <Label htmlFor={`${id}-email`}>Email or Phone Number</Label>
               <Input
                 id={`${id}-email`}
-                placeholder="hi@yourcompany.com or username"
+                placeholder="Please enter Email or Phone Number"
                 type="text"
                 {...register("emailOrUsername", {
                   required: "Email or Phone Number is required",
