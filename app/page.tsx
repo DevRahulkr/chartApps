@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import Link from 'next/link'
 import { AuthDialog } from '@/components/ui/auth-dialog'
-import { Button } from '@/components/ui/button'
-import Image from "next/image"
+import Image from 'next/image'
 
 export default function Home() {
   const { user, loading } = useAuth()
@@ -20,17 +19,17 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-[#f9f7f3] flex items-center justify-center px-4">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-[#b08d57]"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-      <div className="w-full max-w-md space-y-8 px-4 py-10 sm:px-8">
-        <div className="text-center">
-          <div className="mb-6 flex justify-center">
+    <div className="min-h-screen bg-[#f9f7f3] flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-md">
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm px-6 sm:px-8 py-8 space-y-8 text-center">
+          <div className="flex justify-center">
             <Image
               src="/return%20to%20the%20source.svg"
               alt="Return to the Source"
@@ -40,30 +39,27 @@ export default function Home() {
               priority
             />
           </div>
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-            Self Progress Chart
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Please sign in to your account or create a new one
-          </p>
-        </div>
-        <div className="space-y-4">
-          <AuthDialog
-            triggerText="Sign in to your account"
-            title="Welcome back"
-            description="Enter your credentials to login to your account."
-          >
-            <Button className="w-full" size="lg">
-              Sign In
-            </Button>
-          </AuthDialog>
-          
-          <Link
-            href="/register"
-            className="group relative w-full flex justify-center py-3 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
-          >
-            Create Account
-          </Link>
+          <div>
+            <h2 className="text-3xl font-semibold text-gray-900">Self Progress Chart</h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Please sign in to your account or create a new one
+            </p>
+          </div>
+          <div className="space-y-4">
+            <AuthDialog
+              triggerText="Sign in to your account"
+              title="Welcome back"
+              description="Enter your credentials to login to your account."
+            >
+              <button type="button" className="btn-primary w-full">
+                Sign In
+              </button>
+            </AuthDialog>
+
+            <Link href="/register" className="btn-outline w-full text-center">
+              Create Account
+            </Link>
+          </div>
         </div>
       </div>
     </div>

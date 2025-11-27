@@ -93,10 +93,10 @@ export default function ProfileDashboard() {
               />
             </div>
           </div>
-          <div className="flex flex-wrap gap-3 text-sm text-gray-700 md:justify-end">
+          <div className="flex w-full flex-col gap-3 text-sm text-gray-700 sm:w-auto sm:flex-row sm:justify-end">
             <button
               onClick={handleLogout}
-              className="btn-ghost logout-btn"
+              className="w-full sm:w-auto btn-outline-gold logout-btn"
             >
               Log out
             </button>

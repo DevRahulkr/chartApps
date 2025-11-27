@@ -48,7 +48,7 @@ export default function ProfilePage() {
               </Link>
               <button
                 onClick={handleLogout}
-                className="logout-btn bg-[#b08d57] hover:bg-[#a3824d] text-white px-5 py-2.5 rounded-xl font-medium transition-colors"
+                className="logout-btn btn-outline-gold"
               >
                 Logout
               </button>

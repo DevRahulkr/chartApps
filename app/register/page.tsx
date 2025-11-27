@@ -105,8 +105,8 @@ const onSubmit = async (data: RegisterForm) => {
   // Show loading while checking authentication
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-[#f9f7f3] flex items-center justify-center px-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b08d57]"></div>
       </div>
     )
   }
@@ -114,43 +114,43 @@ const onSubmit = async (data: RegisterForm) => {
   // Don't show register form if user is already authenticated
   if (user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-[#f9f7f3] flex items-center justify-center px-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b08d57]"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
-        <div>
-          <div className="flex justify-center mb-6">
+    <div className="min-h-screen bg-[#f9f7f3] px-4 py-10">
+      <div className="mx-auto w-full max-w-3xl">
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm px-6 sm:px-8 py-8 space-y-8">
+          <div className="text-center space-y-4">
             <Image
-              src="/return%20to%20the%20source.svg"  
+              src="/return%20to%20the%20source.svg"
               alt="Return to the Source"
               width={200}
               height={200}
-              className="h-20 w-auto sm:h-24 md:h-28"
+              className="mx-auto h-20 w-auto sm:h-24 md:h-28"
             />
+            <div>
+              <h2 className="text-3xl font-semibold text-gray-900">Create your account</h2>
+              <p className="mt-2 text-sm text-gray-600">
+                Already registered?{' '}
+                <AuthDialog
+                  triggerText="sign in"
+                  title="Welcome back"
+                  description="Enter your credentials to login to your account."
+                >
+                  <span className="font-medium text-[#b08d57] hover:text-[#a3824d] cursor-pointer">
+                    Sign in
+                  </span>
+                </AuthDialog>
+              </p>
+            </div>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <AuthDialog
-              triggerText="sign in to your existing account"
-              title="Welcome back"
-              description="Enter your credentials to login to your account."
-            >
-              <span className="font-medium text-blue-600 hover:text-blue-500 cursor-pointer">
-                sign in to your existing account
-              </span>
-            </AuthDialog>
-          </p>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          <div className="space-y-4">
+
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div>
               <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
                 Full Name
@@ -174,16 +174,14 @@ const onSubmit = async (data: RegisterForm) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Gender
-              </label>
-              <div className="mt-2 flex items-center space-x-6">
+              <label className="block text-sm font-medium text-gray-700">Gender</label>
+              <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
                 <label className="flex items-center space-x-2">
                   <input
                     {...register("gender", { required: "Please select gender" })}
                     type="radio"
                     value="Brother"
-                    className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    className="h-4 w-4 text-[#b08d57] border-gray-300 focus:ring-[#b08d57]"
                   />
                   <span className="text-gray-700 text-sm">Brother</span>
                 </label>
@@ -192,7 +190,7 @@ const onSubmit = async (data: RegisterForm) => {
                     {...register("gender", { required: "Please select gender" })}
                     type="radio"
                     value="Sister"
-                    className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    className="h-4 w-4 text-[#b08d57] border-gray-300 focus:ring-[#b08d57]"
                   />
                   <span className="text-gray-700 text-sm">Sister</span>
                 </label>
@@ -300,7 +298,7 @@ const onSubmit = async (data: RegisterForm) => {
                 })}
                 type="text"
                 autoComplete="BKCentre"
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className="mt-1 input-field"
                 placeholder="Enter your BK Centre"
               />
               {errors.BKCentre && (
@@ -309,12 +307,12 @@ const onSubmit = async (data: RegisterForm) => {
             </div>
 
             
-            <div>
+            <div className="md:col-span-2">
               <label htmlFor="PhoneNumber" className="block text-sm font-medium text-gray-700">
                 Phone Number
               </label>
-              <div className="flex">
-                <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+              <div className="mt-1 flex rounded-lg border border-gray-200 bg-white shadow-sm">
+                <span className="inline-flex items-center px-3 text-sm text-gray-600 border-r border-gray-200 rounded-l-lg bg-gray-50">
                   {selectedDialCode || '+--'}
                 </span>
                 <input
@@ -326,7 +324,7 @@ const onSubmit = async (data: RegisterForm) => {
                     },
                   })}
                   type="tel"
-                  className="flex-1 min-w-0 input-field rounded-l-none"
+                  className="flex-1 rounded-r-lg bg-transparent px-3 py-2 text-sm text-gray-900 focus-visible:outline-none"
                   placeholder="Enter your phone number"
                 />
               </div>
@@ -398,18 +396,19 @@ const onSubmit = async (data: RegisterForm) => {
                 <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
               )}
             </div>
-          </div>
+            </div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="group relative w-full flex justify-center btn-primary"
-            >
-              {isLoading ? 'Creating account...' : 'Create account'}
-            </button>
-          </div>
-        </form>
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="btn-primary w-full disabled:bg-gray-400"
+              >
+                {isLoading ? 'Creating account...' : 'Create account'}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   )
