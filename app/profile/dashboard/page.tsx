@@ -133,14 +133,14 @@ export default function ProfileDashboard() {
                     Reset User Password
                   </p>
                   <p className="text-xs text-gray-500">
-                    Enter user identifier (email or username) and new password.
+                    Enter user Phone Number and new password.
                   </p>
                 </div>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
                 <input
                   type="text"
-                  placeholder="User identifier (email / username)"
+                  placeholder="User identifier (Phone Number)"
                   value={resetIdentifier}
                   onChange={(e) => setResetIdentifier(e.target.value)}
                   className="input-field"
