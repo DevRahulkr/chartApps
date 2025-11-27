@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
@@ -19,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { useId } from "react";
 import toast from "react-hot-toast";
 import Image from "next/image"
+import { cn } from "@/lib/utils";
 
 interface LoginForm {
   emailOrUsername: string;
@@ -46,7 +46,6 @@ export function AuthDialog({
   const { login,user } = useAuth();
   const router = useRouter();
   const id = useId();
- console.log(router,'router')
   const {
     register,
     handleSubmit,
@@ -84,9 +83,14 @@ export function AuthDialog({
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        {children || <Button variant="outline">{triggerText}</Button>}
+        {children || (
+          <button type="button" className="btn-outline w-full sm:w-auto">
+            {triggerText}
+          </button>
+        )}
       </DialogTrigger>
       <DialogContent
+        className="sm:max-w-md rounded-2xl border border-gray-100 bg-white px-6 py-8 sm:px-8"
         onPointerDownOutside={(e) => e.preventDefault()}
         onInteractOutside={(e) => e.preventDefault()}
       >
@@ -114,15 +118,18 @@ export function AuthDialog({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor={`${id}-email`}>Email or Username</Label>
+              <Label htmlFor={`${id}-email`}>Email or Phone Number</Label>
               <Input
                 id={`${id}-email`}
-                placeholder="hi@yourcompany.com or username"
+                placeholder="Please enter Email or Phone Number"
                 type="text"
                 {...register("emailOrUsername", {
-                  required: "Email or username is required",
+                  required: "Email or Phone Number is required",
                 })}
-                className={errors.emailOrUsername ? "border-destructive" : ""}
+                className={cn(
+                  "input-field",
+                  errors.emailOrUsername && "border-destructive"
+                )}
               />
               {errors.emailOrUsername && (
                 <p className="text-sm text-destructive">{errors.emailOrUsername.message}</p>
@@ -141,7 +148,10 @@ export function AuthDialog({
                     message: "Password must be at least 6 characters",
                   },
                 })}
-                className={errors.password ? "border-destructive" : ""}
+                className={cn(
+                  "input-field",
+                  errors.password && "border-destructive"
+                )}
               />
               {errors.password && (
                 <p className="text-sm text-destructive">{errors.password.message}</p>
@@ -158,13 +168,17 @@ export function AuthDialog({
                 Remember me
               </Label>
             </div>
-            <a className="text-sm underline hover:no-underline" href="#">
+            <a className="text-sm font-medium text-[#b08d57] hover:text-[#a3824d]" href="#">
               Forgot password?
             </a>
           </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <button
+            type="submit"
+            className="w-full btn-primary disabled:bg-gray-400"
+            disabled={isLoading}
+          >
             {isLoading ? "Signing in..." : "Sign in"}
-          </Button>
+          </button>
         </form>
       </DialogContent>
     </Dialog>
