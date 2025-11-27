@@ -6,6 +6,7 @@ import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { api } from '@/lib/api'
+import Image from 'next/image'
 
 interface Question {
   id: string
@@ -198,9 +199,9 @@ const fetchForm = async () => {
 
   if (loading || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#f9f7f3] flex items-center justify-center px-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b08d57] mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading form...</p>
         </div>
       </div>
@@ -209,11 +210,11 @@ const fetchForm = async () => {
 
   if (!user || user.role !== 'admin') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#f9f7f3] flex items-center justify-center px-4">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
           <p className="text-gray-600 mb-4">You need admin privileges to edit forms.</p>
-          <Link href="/profile/dashboard" className="text-blue-600 hover:text-blue-800">
+          <Link href="/profile/dashboard" className="text-[#b08d57] hover:text-[#a3824d]">
             Go to Dashboard
           </Link>
         </div>
@@ -221,40 +222,52 @@ const fetchForm = async () => {
     )
   }
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">Edit Form</h1>
-                <p className="mt-2 text-gray-600">Update form details and questions</p>
-              </div>
-              <div className="flex space-x-3">
-                <button
-                  onClick={handleDelete}
-                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Delete Form
-                </button>
-                <Link
-                  href="/admin/dashboard"
-                  className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Back to Dashboard
-                </Link>
+    <div className="min-h-screen bg-[#f9f7f3] px-4 py-10">
+      <div className="mx-auto w-full max-w-7xl space-y-8">
+        {/* Header */}
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm px-6 sm:px-8 py-6">
+          <div className="flex flex-col gap-6 sm:gap-4 md:flex-row md:items-center md:justify-between mb-8">
+            <div className="flex items-center justify-between gap-3 md:justify-start">
+              <div
+                className="flex shrink-0 items-center justify-center rounded-full bg-white/40 p-2"
+                aria-hidden="true"
+              >
+                <Image
+                  src="/return%20to%20the%20source.svg"
+                  alt="Return to the Source"
+                  width={200}
+                  height={200}
+                  className="h-12 w-auto sm:h-14 md:h-16"
+                  priority
+                />
               </div>
             </div>
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <button
+                onClick={handleDelete}
+                className="w-full sm:w-auto text-center bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              >
+                Delete Form
+              </button>
+              <Link
+                href="/admin/dashboard"
+                className="w-full sm:w-auto logout-btn btn-back"
+              >
+                Back to Dashboard
+              </Link>
+            </div>
+          </div>
+          
+          <div>
+            <h1 className="text-3xl font-semibold text-gray-900 mb-2">Edit Form</h1>
+            <p className="text-sm text-gray-600">Update form details and questions</p>
           </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Main Content */}
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Form Details */}
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 sm:p-8">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Form Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -266,7 +279,7 @@ const fetchForm = async () => {
                   required
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                  className="input-field"
                   placeholder="Enter form title"
                 />
               </div>
@@ -279,7 +292,7 @@ const fetchForm = async () => {
                   required
                   value={formData.month}
                   onChange={(e) => setFormData({ ...formData, month: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                  className="input-field"
                 />
               </div>
               <div>
@@ -292,7 +305,7 @@ const fetchForm = async () => {
                   onChange={(e) =>
                     setFormData({ ...formData, chart_start_date: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                  className="input-field"
                 />
               </div>
               <div>
@@ -305,7 +318,7 @@ const fetchForm = async () => {
                   onChange={(e) =>
                     setFormData({ ...formData, chart_end_date: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                  className="input-field"
                 />
               </div>
               <div>
@@ -318,7 +331,7 @@ const fetchForm = async () => {
                   onChange={(e) =>
                     setFormData({ ...formData, validity_start_date: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                  className="input-field"
                 />
               </div>
               <div>
@@ -331,7 +344,7 @@ const fetchForm = async () => {
                   onChange={(e) =>
                     setFormData({ ...formData, validity_end_date: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                  className="input-field"
                 />
               </div>
 
@@ -344,20 +357,20 @@ const fetchForm = async () => {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                className="input-field"
                 placeholder="Enter form description"
               />
             </div>
           </div>
 
           {/* Questions */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 sm:p-8">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-4">
               <h2 className="text-xl font-bold text-gray-900">Questions</h2>
               <button
                 type="button"
                 onClick={addQuestion}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="w-full sm:w-auto btn-primary"
               >
                 Add Question
               </button>
@@ -388,7 +401,7 @@ const fetchForm = async () => {
                       required
                       value={question.text}
                       onChange={(e) => updateQuestion(question.id, 'text', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                      className="input-field"
                       placeholder="Enter question text"
                     />
                   </div>
@@ -399,7 +412,7 @@ const fetchForm = async () => {
                     <select
                       value={question.type}
                       onChange={(e) => updateQuestion(question.id, 'type', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                      className="input-field"
                     >
                       <option value="text">Text</option>
                       <option value="textarea">Textarea</option>
@@ -446,7 +459,7 @@ const fetchForm = async () => {
                           type="text"
                           value={option.text}
                           onChange={(e) => updateOption(question.id, option.id, e.target.value)}
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                          className="flex-1 input-field"
                           placeholder={`Option ${optionIndex + 1}`}
                         />
                         <button
@@ -465,17 +478,17 @@ const fetchForm = async () => {
           </div>
 
           {/* Submit Button */}
-          <div className="flex justify-end space-x-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
             <Link
               href="/admin/dashboard"
-              className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+              className="w-full sm:w-auto text-center btn-outline"
             >
               Cancel
             </Link>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+              className="w-full sm:w-auto btn-primary disabled:bg-gray-400"
             >
               {isSubmitting ? 'Updating...' : 'Update Form'}
             </button>
